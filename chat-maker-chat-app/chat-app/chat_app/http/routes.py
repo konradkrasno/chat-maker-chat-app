@@ -14,7 +14,7 @@ async def get_user_chats(user_id: str):
     try:
         chats = dao.get_user_chats(user_id)
     except ChatDoesNotExistsError as e:
-        return JSONResponse({"error": e})
+        return JSONResponse({"error": str(e)})
     return JSONResponse({chat.id: chat.dict() for chat in chats})
 
 
@@ -23,5 +23,5 @@ async def get_user_chat(user_id: str, chat_id: str):
     try:
         chat = dao.get_user_chat(user_id, chat_id)
     except ChatDoesNotExistsError as e:
-        return JSONResponse({"error": e})
+        return JSONResponse({"error": str(e)})
     return JSONResponse(chat.dict())
