@@ -15,3 +15,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+from chat_app.http import routes
+from chat_app.websocket import routes

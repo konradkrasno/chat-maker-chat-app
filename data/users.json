@@ -34,5 +34,11 @@
     "avatarSource": "https://bootdey.com/img/Content/avatar/avatar3.png",
     "name": "Dean",
     "surname": "Henry"
+  },
+  {
+    "id": "u7",
+    "avatarSource": "https://bootdey.com/img/Content/avatar/avatar4.png",
+    "name": "Vincent",
+    "surname": "Vega"
   }
 ]

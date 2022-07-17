@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Dict, List
+from typing import Dict, List, Union
 
 from chat_app.schemas import Chat, User, UserChats
 from chat_app.exceptions import ChatDoesNotExistsError
@@ -10,8 +10,11 @@ from chat_app.exceptions import ChatDoesNotExistsError
 class AbstractModel(dict):
     @classmethod
     @abstractmethod
-    def load_from_dict(cls, **kwargs):
+    def load_from_dict(cls, data: Union[Dict, List]):
         pass
+
+    def serialize(self) -> Dict:
+        return {k: v.dict() for k, v in self.items()}
 
 
 class UserModel(AbstractModel):
@@ -22,7 +25,7 @@ class UserModel(AbstractModel):
     """
 
     @classmethod
-    def load_from_dict(cls, data: Dict):
+    def load_from_dict(cls, data: List):
         obj = cls()
         for item in data:
             obj[item["id"]] = User.load_from_dict(**item)
@@ -40,7 +43,7 @@ class ChatModel(AbstractModel):
     def load_from_dict(cls, data: Dict):
         obj = cls()
         for k, v in data.items():
-            obj[k] = Chat.load_from_dict(id=k, messages=v)
+            obj[k] = Chat.load_from_dict(**v)
         return obj
 
     def get_chat(self, chat_id: str) -> Chat:

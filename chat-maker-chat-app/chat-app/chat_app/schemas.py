@@ -36,6 +36,9 @@ class Chat(BaseModel):
             messages=[Message.load_from_dict(**item) for item in kwargs["messages"]],
         )
 
+    def add_message(self, message: Message) -> None:
+        self.messages.append(message)
+
 
 class UserChats(BaseModel):
     user_id: str
