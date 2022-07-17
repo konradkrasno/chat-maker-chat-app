@@ -4,8 +4,6 @@ from typing import Dict, List, Union
 from chat_app.schemas import Chat, User, UserChats
 from chat_app.exceptions import ChatDoesNotExistsError
 
-# chat_id = uuid.uuid4().hex[:10].upper()
-
 
 class AbstractModel(dict):
     @classmethod

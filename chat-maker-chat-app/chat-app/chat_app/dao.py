@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Union
 
 from chat_app.schemas import Chat, Message
 from chat_app.models import ChatModel, UserModel, UserChatsModel
@@ -28,7 +28,7 @@ class Dao:
         }
         return file_path_map[_type]
 
-    def _load_data(self, _type: str) -> Dict:
+    def _load_data(self, _type: str) -> Union[Dict, List]:
         if self.__storage_type == "files":
             file_path = self._get_file_path(_type)
             with open(DATA_DIR / file_path, "r") as file:
