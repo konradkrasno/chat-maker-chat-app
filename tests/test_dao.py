@@ -1,17 +1,16 @@
 def test_load_users(dao):
-    assert len(dao.users) == 6
+    assert len(dao._users) == 7
 
 
 def test_load_chats(dao):
-    assert len(dao.chats) == 1
-    assert dao.chats["11AA1CA0E120450"].id == "11AA1CA0E120450"
-    assert len(dao.chats["11AA1CA0E120450"].messages) == 3
+    assert len(dao._chats) == 6
+    assert dao._chats["chat2"].id == "chat2"
+    assert len(dao._chats["chat2"].messages) == 3
 
 
 def test_load_users_chats(dao):
-    assert len(dao.users_chats) == 1
-    assert dao.users_chats["u7"].chat_ids == ["11AA1CA0E120450"]
+    assert len(dao._users_chats) == 1
 
 
 def test_get_user_chat(dao):
-    assert dao.get_user_chat("u7", "11AA1CA0E120450") == dao.chats["11AA1CA0E120450"]
+    assert dao.get_user_chat("u7", "chat2") == dao._chats["chat2"]

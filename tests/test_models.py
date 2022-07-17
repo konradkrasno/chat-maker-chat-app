@@ -13,7 +13,7 @@ def test_chat_model(dao):
     chats_data = dao._load_data("chats")
     chat_model = ChatModel.load_from_dict(chats_data)
     assert isinstance(chat_model, dict)
-    assert isinstance(chat_model["11AA1CA0E120450"], Chat)
+    assert isinstance(chat_model["chat2"], Chat)
 
 
 def test_user_chats_model(dao):
