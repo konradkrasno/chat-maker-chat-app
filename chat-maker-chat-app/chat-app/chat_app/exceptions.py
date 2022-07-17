@@ -1,0 +1,2 @@
+class ChatDoesNotExistsError(Exception):
+    pass
