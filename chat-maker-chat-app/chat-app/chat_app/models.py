@@ -2,7 +2,7 @@ from abc import abstractmethod
 from typing import Dict, List, Union
 
 from chat_app.schemas import Chat, User, UserChats
-from chat_app.exceptions import ChatDoesNotExistsError
+from chat_app.exceptions import ItemDoesNotExistsError
 
 
 class AbstractModel(dict):
@@ -13,6 +13,14 @@ class AbstractModel(dict):
 
     def serialize(self) -> Dict:
         return {k: v.dict() for k, v in self.items()}
+
+    def get_item(self, _id: str) -> object:
+        item = self.get(_id)
+        if item:
+            return item
+        raise ItemDoesNotExistsError(
+            f"Can not find item with provided id: '{_id}'."
+        )
 
 
 class UserModel(AbstractModel):
@@ -43,14 +51,6 @@ class ChatModel(AbstractModel):
         for k, v in data.items():
             obj[k] = Chat.load_from_dict(**v)
         return obj
-
-    def get_chat(self, chat_id: str) -> Chat:
-        chat = self.get(chat_id)
-        if chat:
-            return chat
-        raise ChatDoesNotExistsError(
-            f"Can not find chat with provided id: '{chat_id}'."
-        )
 
 
 class UserChatsModel(AbstractModel):

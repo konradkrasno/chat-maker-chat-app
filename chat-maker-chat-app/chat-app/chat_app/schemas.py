@@ -27,12 +27,14 @@ class Message(BaseModel):
 
 class Chat(BaseModel):
     id: str
+    members: List[str]
     messages: List[Message]
 
     @classmethod
     def load_from_dict(cls, **kwargs):
         return cls(
             id=kwargs["id"],
+            members=kwargs["members"],
             messages=[Message.load_from_dict(**item) for item in kwargs["messages"]],
         )
 

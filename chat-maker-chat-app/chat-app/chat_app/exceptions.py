@@ -1,2 +1,2 @@
-class ChatDoesNotExistsError(Exception):
+class ItemDoesNotExistsError(Exception):
     pass

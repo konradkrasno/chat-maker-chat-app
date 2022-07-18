@@ -2,9 +2,9 @@ import json
 from pathlib import Path
 from typing import Dict, List, Union
 
-from chat_app.schemas import Chat, Message
+from chat_app.schemas import Chat, Message, User
 from chat_app.models import ChatModel, UserModel, UserChatsModel
-from chat_app.exceptions import ChatDoesNotExistsError
+from chat_app.exceptions import ItemDoesNotExistsError
 
 BASE_DIR = Path(__name__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
@@ -48,10 +48,31 @@ class Dao:
     def get_user_chat(self, user_id: str, chat_id: str) -> Chat:
         chat_ids = self._users_chats.get_user_chats_ids(user_id)
         if chat_id in chat_ids:
-            return self._chats.get_chat(chat_id)
-        raise ChatDoesNotExistsError(
+            return self._chats.get_item(chat_id)
+        raise ItemDoesNotExistsError(
             f"Provided chat: '{chat_id}' does not exist or you are not permitted to join."
         )
+
+    @staticmethod
+    def collect_member_info(member: User, chat_id: str) -> Dict:
+        return {
+            **member.dict(),
+            "chat_id": chat_id,
+            "active": True,
+            "status": " ",
+            "lastSeen": "online",
+        }
+
+    def get_chats_members_info(self, user_id: str) -> List[Dict]:
+        chats = self.get_user_chats(user_id)
+        members_info = []
+        for chat in chats:
+            members_ids = chat.members
+            for member_id in members_ids:
+                member = self._users.get_item(member_id)
+                info = self.collect_member_info(member, chat.id)
+                members_info.append(info)
+        return members_info
 
     def put_message(self, user_id: str, chat_id: str, message_data: Dict) -> None:
         chat = self.get_user_chat(user_id, chat_id)
