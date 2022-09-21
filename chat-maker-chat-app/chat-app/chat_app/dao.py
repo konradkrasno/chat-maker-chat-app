@@ -54,25 +54,23 @@ class Dao:
         )
 
     @staticmethod
-    def collect_member_info(member: User, chat_id: str) -> Dict:
+    def _collect_member_info(member: User, chat_id: str) -> Dict:
         return {
             **member.dict(),
-            "chat_id": chat_id,
             "active": True,
             "status": " ",
             "lastSeen": "online",
         }
 
-    def get_chats_members_info(self, user_id: str) -> List[Dict]:
+    def get_chats_members_info(self, user_id: str) -> Dict[str, List]:
         chats = self.get_user_chats(user_id)
-        members_info = []
-        for chat in chats:
-            members_ids = chat.members
-            for member_id in members_ids:
-                member = self._users.get_item(member_id)
-                info = self.collect_member_info(member, chat.id)
-                members_info.append(info)
-        return members_info
+        return {
+            chat.id: [
+                self._collect_member_info(self._users.get_item(member_id), chat.id)
+                for member_id in chat.members
+            ]
+            for chat in chats
+        }
 
     def put_message(self, user_id: str, chat_id: str, message_data: Dict) -> None:
         chat = self.get_user_chat(user_id, chat_id)

@@ -18,9 +18,7 @@ class AbstractModel(dict):
         item = self.get(_id)
         if item:
             return item
-        raise ItemDoesNotExistsError(
-            f"Can not find item with provided id: '{_id}'."
-        )
+        raise ItemDoesNotExistsError(f"Can not find item with provided id: '{_id}'.")
 
 
 class UserModel(AbstractModel):
