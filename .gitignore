@@ -2,6 +2,9 @@
 .idea/
 .pytest_cache/
 
-chat-maker-chat-app/chat-app/chat_maker_chat_chat_app.egg-info
-
 venv/
+
+**/chat_maker_chat_chat_app.egg-info/**
+**/chat-maker-app-artifacts/**
+
+.env

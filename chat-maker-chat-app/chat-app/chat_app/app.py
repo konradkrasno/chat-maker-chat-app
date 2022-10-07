@@ -1,5 +1,6 @@
 from chat_app.api.routes import endpoints as api_endpoints
 from chat_app.settings import ApiSettings, get_api_settings
+from chat_app.websocket.routes import endpoints as websocket_endpoints
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -16,6 +17,7 @@ def create_app(settings: ApiSettings):
     )
 
     api_endpoints(app)
+    websocket_endpoints(app)
 
     return app
 
