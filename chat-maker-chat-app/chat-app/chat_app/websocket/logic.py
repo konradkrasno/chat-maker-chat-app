@@ -1,10 +1,16 @@
 from chat_app.dao import Dao, get_dao
-from chat_app.websocket import manager
+from chat_app.websocket.connection_manager import (
+    ConnectionManager,
+    get_connection_manager,
+)
 from fastapi import Depends, WebSocket, WebSocketDisconnect
 
 
 async def websocket_endpoint(
-    websocket: WebSocket, user_id: str, dao: Dao = Depends(get_dao)
+    websocket: WebSocket,
+    user_id: str,
+    dao: Dao = Depends(get_dao),
+    manager: ConnectionManager = Depends(get_connection_manager),
 ):
     await manager.connect(websocket)
     await manager.broadcast(f"Client #{user_id} joined the chat")

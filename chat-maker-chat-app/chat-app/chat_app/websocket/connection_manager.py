@@ -22,3 +22,7 @@ class ConnectionManager:
         for connection in self.active_connections:
             if connection != websocket:
                 await connection.send_text(message)
+
+
+def get_connection_manager() -> ConnectionManager:
+    return ConnectionManager()
