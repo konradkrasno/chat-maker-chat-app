@@ -1,5 +1,5 @@
-from chat_app.schemas import User, Chat, UserChats
-from chat_app.models import UserModel, ChatModel, UserChatsModel
+from chat_app.models import ChatModel, UserChatsModel, UserModel
+from chat_app.schemas import Chat, User, UserChats
 
 
 def test_user_model(dao):

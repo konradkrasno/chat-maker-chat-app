@@ -1,18 +1,17 @@
 import json
-from pathlib import Path
 from typing import Dict, List, Union
 
-from chat_app.schemas import Chat, Message, User
-from chat_app.models import ChatModel, UserModel, UserChatsModel
 from chat_app.exceptions import ItemDoesNotExistsError
-
-BASE_DIR = Path(__name__).resolve().parent
-DATA_DIR = BASE_DIR / "data"
+from chat_app.models import ChatModel, UserChatsModel, UserModel
+from chat_app.schemas import Chat, Message, User
+from chat_app.settings import ApiSettings, get_api_settings
+from fastapi import Depends
 
 
 class Dao:
-    def __init__(self, storage_type: str):
-        self.__storage_type = storage_type
+    def __init__(self, settings: ApiSettings = Depends(get_api_settings)):
+        self.__storage_type = settings.STORAGE_TYPE
+        self._settings = settings
         self._users = UserModel.load_from_dict(self._load_data("users"))
         self._chats = ChatModel.load_from_dict(self._load_data("chats"))
         self._users_chats = UserChatsModel.load_from_dict(
@@ -31,14 +30,14 @@ class Dao:
     def _load_data(self, _type: str) -> Union[Dict, List]:
         if self.__storage_type == "files":
             file_path = self._get_file_path(_type)
-            with open(DATA_DIR / file_path, "r") as file:
+            with open(self._settings.DATA_DIR / file_path, "r") as file:
                 return json.load(file)
         return {}
 
     def _dump_data(self, _type: str) -> None:
         if self.__storage_type == "files":
             file_path = self._get_file_path(_type)
-            with open(DATA_DIR / file_path, "w") as file:
+            with open(self._settings.DATA_DIR / file_path, "w") as file:
                 return json.dump(self.__getattribute__(f"_{_type}").serialize(), file)
 
     def get_user_chats(self, user_id: str) -> List[Chat]:
@@ -54,7 +53,7 @@ class Dao:
         )
 
     @staticmethod
-    def _collect_member_info(member: User, chat_id: str) -> Dict:
+    def _collect_member_info(member: User) -> Dict:
         return {
             **member.dict(),
             "active": True,
@@ -66,7 +65,7 @@ class Dao:
         chats = self.get_user_chats(user_id)
         return {
             chat.id: [
-                self._collect_member_info(self._users.get_item(member_id), chat.id)
+                self._collect_member_info(self._users.get_item(member_id))
                 for member_id in chat.members
             ]
             for chat in chats
@@ -77,3 +76,7 @@ class Dao:
         message = Message.load_from_dict(**message_data)
         chat.add_message(message)
         self._dump_data("chats")
+
+
+def get_dao(settings: ApiSettings = Depends(get_api_settings)) -> Dao:
+    return Dao(settings=settings)
