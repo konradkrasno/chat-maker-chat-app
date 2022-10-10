@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import List
 
 import pytest
-from chat_app.dao import Dao
+from chat_app.dao import ChatDao
 from pydantic import BaseSettings
 
 BASE_DIR: Path = Path(__name__).resolve().parent
@@ -21,4 +21,4 @@ def settings() -> ApiSettings:
 
 @pytest.fixture(scope="session")
 def dao(settings):
-    return Dao(settings)
+    return ChatDao(settings)

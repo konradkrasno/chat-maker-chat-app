@@ -1,72 +1,65 @@
-from abc import abstractmethod
-from typing import Dict, List, Union
+from typing import List
 
-from chat_app.exceptions import ItemDoesNotExistsError
-from chat_app.schemas import Chat, User, UserChats
+from pydantic import BaseModel
 
 
-class AbstractModel(dict):
-    @classmethod
-    @abstractmethod
-    def load_from_dict(cls, data: Union[Dict, List]):
-        pass
-
-    def serialize(self) -> Dict:
-        return {k: v.dict() for k, v in self.items()}
-
-    def get_item(self, _id: str) -> object:
-        item = self.get(_id)
-        if item:
-            return item
-        raise ItemDoesNotExistsError(f"Can not find item with provided id: '{_id}'.")
-
-
-class UserModel(AbstractModel):
-    """
-    Dict containing all users
-        key: user id
-        value: User object
-    """
+class User(BaseModel):
+    id: str
+    avatarSource: str
+    name: str
+    surname: str
 
     @classmethod
-    def load_from_dict(cls, data: List):
-        obj = cls()
-        for item in data:
-            obj[item["id"]] = User.load_from_dict(**item)
-        return obj
+    def load_from_dict(cls, **kwargs):
+        return cls(**kwargs)
 
 
-class ChatModel(AbstractModel):
-    """
-    Dict containing all chats
-        key: chat id
-        value: Chat object
-    """
+class UserCreds(BaseModel):
+    id: str
+    email: str
+    password: str
 
     @classmethod
-    def load_from_dict(cls, data: Dict):
-        obj = cls()
-        for k, v in data.items():
-            obj[k] = Chat.load_from_dict(**v)
-        return obj
+    def load_from_dict(cls, **kwargs):
+        return cls(**kwargs)
 
 
-class UserChatsModel(AbstractModel):
-    """
-    Dict containing all user's chats ids
-        key: user id
-        value: UserChats object
-    """
+class Message(BaseModel):
+    id: str
+    sendDate: str
+    content: str
+    sender: User
 
     @classmethod
-    def load_from_dict(cls, data: Dict):
-        obj = cls()
-        for k, v in data.items():
-            obj[k] = UserChats.load_from_dict(user_id=k, chat_ids=v)
-        return obj
+    def load_from_dict(cls, **kwargs):
+        kwargs["sender"] = User(**kwargs["sender"])
+        return cls(**kwargs)
 
-    def get_user_chats_ids(self, user_id: str) -> List[str]:
-        user_chats = self.get(user_id)
-        if user_chats:
-            return user_chats.chat_ids
-        return []
+
+class Chat(BaseModel):
+    id: str
+    members: List[str]
+    messages: List[Message]
+
+    @classmethod
+    def load_from_dict(cls, **kwargs):
+        return cls(
+            id=kwargs["id"],
+            members=kwargs["members"],
+            messages=[Message.load_from_dict(**item) for item in kwargs["messages"]],
+        )
+
+    def add_message(self, message: Message) -> None:
+        self.messages.append(message)
+
+
+class UserChats(BaseModel):
+    user_id: str
+    chat_ids: List[str]
+
+    @classmethod
+    def load_from_dict(cls, **kwargs):
+        return cls(
+            user_id=kwargs["user_id"],
+            chat_ids=[chat_id for chat_id in kwargs["chat_ids"]],
+        )
