@@ -8,7 +8,7 @@ BASE_DIR: Path = Path(__name__).resolve().parent
 
 class ApiSettings(BaseSettings):
     STORAGE_TYPE: str
-    DATA_DIR: Path = BASE_DIR.parent.parent.parent / "data"
+    DATA_DIR: Path = BASE_DIR.parent.parent / "data"
     ALLOW_ORIGINS: List[str] = [
         "http://localhost:3000",
         "http://localhost",

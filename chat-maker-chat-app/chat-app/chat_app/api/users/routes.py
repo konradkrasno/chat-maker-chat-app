@@ -4,19 +4,19 @@ from fastapi import FastAPI
 
 def endpoints(app: FastAPI):
     app.add_api_route(
-        "/user/{user_id}/login",
+        "/user/login/{user_id}",
         logic.login,
         methods=["POST"],
     )
 
     app.add_api_route(
-        "/user/{user_id}/logout",
+        "/user/logout/{user_id}",
         logic.logout,
         methods=["GET"],
     )
 
     app.add_api_route(
-        "/user/{user_id}/sign-in",
+        "/user/sign-in",
         logic.sign_in,
         methods=["POST"],
     )

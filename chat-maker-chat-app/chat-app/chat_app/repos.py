@@ -1,10 +1,12 @@
 from typing import Any, Dict, Iterable, List, Mapping, Union
 
-from chat_app.exceptions import ItemDoesNotExistsError
+from chat_app.exceptions import ItemAlreadyExistsError, ItemDoesNotExistsError
 from chat_app.models import Chat, User, UserChats, UserCreds
 
 
 class AbstractRepo(dict):
+    unique_fields = []
+
     @classmethod
     def _base_load_from_dict(cls, data: Union[Dict, List], model: Any):
         obj = cls()
@@ -27,8 +29,18 @@ class AbstractRepo(dict):
             return item
         raise ItemDoesNotExistsError(f"Can not find item with provided id: '{_id}'.")
 
-    def put_item(self, item: Dict) -> None:
-        self[item["id"]] = item
+    def put_item(self, item: Any) -> None:
+        if item.id in self.keys():
+            raise ItemAlreadyExistsError(f"Item with id: {item.id} already exists")
+        for _obj in self.values():
+            for field in self.unique_fields:
+                f_v = getattr(item, field)
+                if f_v == getattr(_obj, field):
+                    raise ItemAlreadyExistsError(
+                        f"{item.__class__.__name__} with field '{field}'='{f_v}' already exists"
+                    )
+
+        self[item.id] = item
 
 
 class UserRepo(AbstractRepo):
@@ -37,6 +49,8 @@ class UserRepo(AbstractRepo):
         key: user id
         value: User object
     """
+
+    unique_fields = ["name", "surname"]
 
     @classmethod
     def load_from_dict(cls, data: List):
@@ -49,6 +63,8 @@ class UserCredsRepo(AbstractRepo):
         key: user id
         value: User credentials
     """
+
+    unique_fields = ["email"]
 
     @classmethod
     def load_from_dict(cls, data: List):
