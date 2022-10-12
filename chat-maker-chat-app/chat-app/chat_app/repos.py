@@ -5,20 +5,15 @@ from chat_app.models import Chat, User, UserChats, UserCreds
 
 
 class AbstractRepo(dict):
+    repo_key = "id"
     unique_fields = []
 
     @classmethod
-    def _base_load_from_dict(cls, data: Union[Dict, List], model: Any):
+    def _base_load_from_dict(cls, data: Dict, model: Any):
         obj = cls()
-        if isinstance(data, Mapping):
-            for k, v in data.items():
-                obj[k] = model.load_from_dict(**v)
-            return obj
-        if isinstance(data, Iterable):
-            for item in data:
-                obj[item["id"]] = model.load_from_dict(**item)
-            return obj
-        raise Exception(f"Invalid data type: {type(data)}")
+        for k, v in data.items():
+            obj[k] = model.load_from_dict(**v)
+        return obj
 
     def serialize(self) -> Dict:
         return {k: v.dict() for k, v in self.items()}
@@ -39,8 +34,8 @@ class AbstractRepo(dict):
                     raise ItemAlreadyExistsError(
                         f"{item.__class__.__name__} with field '{field}'='{f_v}' already exists"
                     )
-
-        self[item.id] = item
+        repo_key = getattr(item, self.repo_key)
+        self[repo_key] = item
 
 
 class UserRepo(AbstractRepo):
@@ -50,10 +45,8 @@ class UserRepo(AbstractRepo):
         value: User object
     """
 
-    unique_fields = ["name", "surname"]
-
     @classmethod
-    def load_from_dict(cls, data: List):
+    def load_from_dict(cls, data: Dict):
         return cls._base_load_from_dict(data, User)
 
 
@@ -64,10 +57,11 @@ class UserCredsRepo(AbstractRepo):
         value: User credentials
     """
 
+    repo_key = "email"
     unique_fields = ["email"]
 
     @classmethod
-    def load_from_dict(cls, data: List):
+    def load_from_dict(cls, data: Dict):
         return cls._base_load_from_dict(data, UserCreds)
 
 
@@ -79,7 +73,7 @@ class ChatRepo(AbstractRepo):
     """
 
     @classmethod
-    def load_from_dict(cls, data: List):
+    def load_from_dict(cls, data: Dict):
         return cls._base_load_from_dict(data, Chat)
 
 

@@ -63,20 +63,21 @@ class UserDao(BaseDao):
         avatar_source: str = "",
     ) -> User:
         user_id = uuid4().hex
-        user = User(id=user_id, name=name, surname=surname, avatarSource=avatar_source)
-        user_creds = UserCreds(
-            id=user_id,
-            email=email,
-            password=password,
+        user = User.create_item(
+            _id=user_id, name=name, surname=surname, avatar_source=avatar_source
         )
+        user_creds = UserCreds.create_item(_id=user_id, email=email, password=password)
         self._users.put_item(user)
         self._user_creds.put_item(user_creds)
         self._dump_data("users")
         self._dump_data("user_creds")
         return user
 
-    def login(self, email: str, password: str):
-        pass
+    def login(self, email: str, password: str) -> bool:
+        user_creds = self._user_creds.get_item(email)
+        if user_creds.is_valid(password):
+            return True
+        return False
 
     def logout(self, user_id: str):
         pass

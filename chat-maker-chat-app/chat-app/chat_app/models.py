@@ -1,8 +1,9 @@
+import re
 from hashlib import sha256
 from typing import List
 from uuid import uuid4
 
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 
 
 class User(BaseModel):
@@ -10,6 +11,12 @@ class User(BaseModel):
     avatarSource: str
     name: str
     surname: str
+
+    @classmethod
+    def create_item(cls, _id: str, avatar_source: str, name: str, surname: str):
+        return cls.load_from_dict(
+            id=_id, avatarSource=avatar_source, name=name, surname=surname
+        )
 
     @classmethod
     def load_from_dict(cls, **kwargs):
@@ -20,17 +27,33 @@ class UserCreds(BaseModel):
     id: str
     email: str
     password: str
-    _salt: str
+    salt: str
+
+    @classmethod
+    def create_item(cls, _id: str, email: str, password: str):
+        salt = cls._get_salt()
+        return cls.load_from_dict(
+            id=_id,
+            email=email,
+            password=cls._hash_password(password, salt),
+            salt=salt,
+        )
 
     @classmethod
     def load_from_dict(cls, **kwargs):
-        salt = cls._get_salt()
-        return cls(
-            id=kwargs["id"],
-            email=kwargs["email"],
-            password=cls._hash_password(kwargs["password"], salt),
-            _salt=salt,
-        )
+        return cls(**kwargs)
+
+    @validator("email")
+    def check_email(cls, v):
+        if not re.findall("^[\\w\\.\\-_]+@[\\w\\.\\-_]+\\.[\\w]+$", v):
+            raise ValueError(f"Invalid email value: '{v}'")
+        return v
+
+    @validator("password")
+    def check_password(cls, v):
+        if len(v) < 7:
+            raise ValueError("Password must have at least 8 chars")
+        return v
 
     @staticmethod
     def _get_salt() -> str:
@@ -41,8 +64,10 @@ class UserCreds(BaseModel):
         salted_password = f"{salt}{password}"
         return sha256(salted_password.encode()).hexdigest()
 
-    # def check_password(self, password: str):
-    #     unhashed = sha256(self.password).digest()
+    def is_valid(self, password: str) -> bool:
+        if self._hash_password(password, self.salt) == self.password:
+            return True
+        return False
 
 
 class Message(BaseModel):

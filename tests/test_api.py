@@ -18,5 +18,5 @@ def test_sign_up_when_user_exists(app_client, sign_in_response):
     response = app_client.post("/user/sign-in", json=sign_in_response)
     assert response.status_code == 400
     assert response.json() == {
-        "error": f"detail: User with field 'name'='{sign_in_response['name']}' already exists"
+        "error": f"detail: UserCreds with field 'email'='{sign_in_response['email']}' already exists"
     }

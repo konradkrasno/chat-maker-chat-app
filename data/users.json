@@ -1,44 +1,44 @@
-[
-  {
+{
+  "u1": {
     "id": "u1",
     "avatarSource": "https://bootdey.com/img/Content/avatar/avatar1.png",
     "name": "Vincent",
     "surname": "Porter"
   },
-  {
+  "u2": {
     "id": "u2",
     "avatarSource": "https://bootdey.com/img/Content/avatar/avatar2.png",
     "name": "Aiden",
     "surname": "Chavez"
   },
-  {
+  "u3": {
     "id": "u3",
     "avatarSource": "https://bootdey.com/img/Content/avatar/avatar3.png",
     "name": "Mike",
     "surname": "Thomas"
   },
-  {
+  "u4": {
     "id": "u4",
     "avatarSource": "https://bootdey.com/img/Content/avatar/avatar7.png",
     "name": "Christian",
     "surname": "Kelly"
   },
-  {
+  "u5": {
     "id": "u5",
     "avatarSource": "https://bootdey.com/img/Content/avatar/avatar8.png",
     "name": "Monica",
     "surname": "Ward"
   },
-  {
+  "u6": {
     "id": "u6",
     "avatarSource": "https://bootdey.com/img/Content/avatar/avatar3.png",
     "name": "Dean",
     "surname": "Henry"
   },
-  {
+  "u7": {
     "id": "u7",
     "avatarSource": "https://bootdey.com/img/Content/avatar/avatar4.png",
     "name": "Vincent",
     "surname": "Vega"
   }
-]
+}

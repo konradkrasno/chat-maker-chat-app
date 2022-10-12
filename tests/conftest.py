@@ -57,5 +57,5 @@ def sign_in_response() -> Dict:
         "name": "John",
         "surname": "Doe",
         "email": "john@doe.com",
-        "password": "secret",
+        "password": "secretpassword",
     }
