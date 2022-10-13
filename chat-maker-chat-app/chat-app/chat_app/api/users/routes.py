@@ -1,10 +1,11 @@
-from chat_app.api.users import logic
 from fastapi import FastAPI
+
+from chat_app.api.users import logic
 
 
 def endpoints(app: FastAPI):
     app.add_api_route(
-        "/user/login/{user_id}",
+        "/user/login",
         logic.login,
         methods=["POST"],
     )
@@ -18,5 +19,11 @@ def endpoints(app: FastAPI):
     app.add_api_route(
         "/user/sign-in",
         logic.sign_in,
+        methods=["POST"],
+    )
+
+    app.add_api_route(
+        "/user/authenticate/{user_id}",
+        logic.authenticate,
         methods=["POST"],
     )

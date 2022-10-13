@@ -1,14 +1,18 @@
 import json
 from abc import ABC, abstractmethod
+from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Union
+from typing import Dict, List, Optional, Union
 from uuid import uuid4
 
-from chat_app.exceptions import ItemDoesNotExistsError
-from chat_app.models import Chat, Message, User, UserCreds
-from chat_app.repos import ChatRepo, UserChatsRepo, UserCredsRepo, UserRepo
-from chat_app.settings import ApiSettings, get_api_settings
+import jwt
 from fastapi import Depends
+from jwt.exceptions import InvalidSignatureError
+
+from chat_app.exceptions import ItemDoesNotExistsError
+from chat_app.models import Chat, Message, Session, User, UserCreds
+from chat_app.repos import ChatRepo, SessionRepo, UserChatsRepo, UserCredsRepo, UserRepo
+from chat_app.settings import ApiSettings, get_api_settings
 
 
 class BaseDao(ABC):
@@ -45,12 +49,14 @@ class UserDao(BaseDao):
         super().__init__(settings=settings)
         self._users = UserRepo.load_from_dict(self._load_data("users"))
         self._user_creds = UserCredsRepo.load_from_dict(self._load_data("user_creds"))
+        self._session = SessionRepo.load_from_dict(self._load_data("session"))
 
     def _get_file_path(self, _type: str) -> str:
         super()._get_file_path(_type)
         file_path_map = {
             "users": "users.json",
             "user_creds": "user_creds.json",
+            "session": "session.json",
         }
         return file_path_map[_type]
 
@@ -66,17 +72,35 @@ class UserDao(BaseDao):
         user = User.create_item(
             _id=user_id, name=name, surname=surname, avatar_source=avatar_source
         )
-        user_creds = UserCreds.create_item(_id=user_id, email=email, password=password)
+        user_creds = UserCreds.create_item(
+            user_id=user_id, email=email, password=password
+        )
         self._users.put_item(user)
         self._user_creds.put_item(user_creds)
         self._dump_data("users")
         self._dump_data("user_creds")
         return user
 
-    def login(self, email: str, password: str) -> bool:
-        user_creds = self._user_creds.get_item(email)
-        if user_creds.is_valid(password):
-            return True
+    def login(self, email: str, password: str, device_id: str) -> Optional[str]:
+        user_creds = self._user_creds.get_item(key=email)
+        if user_creds.is_valid(password=password):
+            session = Session.create_item(user_id=user_creds.user_id)
+            self._session.update_item(item=session)
+            self._dump_data(_type="session")
+            return session.generate_token(device_id=device_id)
+
+    def authenticate(self, token: str, user_id: str, device_id: str) -> bool:
+        try:
+            session = self._session.get_item(key=user_id)
+        except ItemDoesNotExistsError:
+            return False
+        try:
+            payload = jwt.decode(token, session.secret, algorithms=["HS256"])
+        except InvalidSignatureError:
+            return False
+        if payload.get("time_to_expiry", 0) > datetime.now().timestamp():
+            if payload.get("device_id") == device_id:
+                return True
         return False
 
     def logout(self, user_id: str):

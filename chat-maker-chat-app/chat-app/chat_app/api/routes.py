@@ -1,5 +1,6 @@
-from chat_app.api import logic
 from fastapi import FastAPI
+
+from chat_app.api import logic
 
 
 def endpoints(app: FastAPI):

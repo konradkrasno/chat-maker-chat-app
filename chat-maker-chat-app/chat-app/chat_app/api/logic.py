@@ -1,7 +1,8 @@
-from chat_app.dao import ChatDao, get_chat_dao
-from chat_app.exceptions import ItemDoesNotExistsError
 from fastapi import Depends
 from fastapi.responses import HTMLResponse, JSONResponse
+
+from chat_app.dao import ChatDao, get_chat_dao
+from chat_app.exceptions import ItemDoesNotExistsError
 
 
 async def root():

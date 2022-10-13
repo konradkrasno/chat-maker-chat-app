@@ -1,9 +1,10 @@
-import re
 from hashlib import sha256
-from typing import List
+from typing import Dict, List
 from uuid import uuid4
 
-from pydantic import BaseModel, validator
+import arrow
+import jwt
+from pydantic import BaseModel
 
 
 class User(BaseModel):
@@ -24,16 +25,16 @@ class User(BaseModel):
 
 
 class UserCreds(BaseModel):
-    id: str
+    user_id: str
     email: str
     password: str
     salt: str
 
     @classmethod
-    def create_item(cls, _id: str, email: str, password: str):
+    def create_item(cls, user_id: str, email: str, password: str):
         salt = cls._get_salt()
         return cls.load_from_dict(
-            id=_id,
+            user_id=user_id,
             email=email,
             password=cls._hash_password(password, salt),
             salt=salt,
@@ -42,18 +43,6 @@ class UserCreds(BaseModel):
     @classmethod
     def load_from_dict(cls, **kwargs):
         return cls(**kwargs)
-
-    @validator("email")
-    def check_email(cls, v):
-        if not re.findall("^[\\w\\.\\-_]+@[\\w\\.\\-_]+\\.[\\w]+$", v):
-            raise ValueError(f"Invalid email value: '{v}'")
-        return v
-
-    @validator("password")
-    def check_password(cls, v):
-        if len(v) < 7:
-            raise ValueError("Password must have at least 8 chars")
-        return v
 
     @staticmethod
     def _get_salt() -> str:
@@ -68,6 +57,45 @@ class UserCreds(BaseModel):
         if self._hash_password(password, self.salt) == self.password:
             return True
         return False
+
+
+class Session(BaseModel):
+    id: str
+    user_id: str
+    secret: str
+
+    class TokenPayload(BaseModel):
+        user_id: str
+        time_to_expiry: int
+        session_id: str
+        device_id: str
+
+        @classmethod
+        def create_payload(cls, user_id: str, session_id: str, device_id: str) -> Dict:
+            return cls(
+                user_id=user_id,
+                time_to_expiry=arrow.now().shift(hours=1).timestamp(),
+                session_id=session_id,
+                device_id=device_id,
+            ).dict()
+
+    def generate_token(self, device_id: str) -> str:
+        token_payload = self.TokenPayload.create_payload(
+            user_id=self.user_id, session_id=self.id, device_id=device_id
+        )
+        return jwt.encode(token_payload, self.secret, algorithm="HS256")
+
+    @classmethod
+    def create_item(cls, user_id: str):
+        return cls(
+            id=uuid4().hex,
+            user_id=user_id,
+            secret=uuid4().hex,
+        )
+
+    @classmethod
+    def load_from_dict(cls, **kwargs):
+        return cls(**kwargs)
 
 
 class Message(BaseModel):
