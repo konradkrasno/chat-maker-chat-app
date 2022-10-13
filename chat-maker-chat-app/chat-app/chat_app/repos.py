@@ -31,7 +31,7 @@ class AbstractRepo(dict):
     def put_item(self, item: Any) -> None:
         key = self._get_key_from_item(item)
         if key in self.keys():
-            raise ItemAlreadyExistsError(f"Item with key: {key} already exists")
+            raise ItemAlreadyExistsError(f"{item.__class__.__name__} with key: '{key}' already exists")
         for _obj in self.values():
             for field in self.unique_fields:
                 f_v = getattr(item, field)
