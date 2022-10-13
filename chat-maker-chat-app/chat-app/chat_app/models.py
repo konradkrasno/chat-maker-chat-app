@@ -62,6 +62,7 @@ class UserCreds(BaseModel):
 class Session(BaseModel):
     id: str
     user_id: str
+    device_id: str
     secret: str
 
     class TokenPayload(BaseModel):
@@ -79,17 +80,18 @@ class Session(BaseModel):
                 device_id=device_id,
             ).dict()
 
-    def generate_token(self, device_id: str) -> str:
+    def generate_token(self) -> str:
         token_payload = self.TokenPayload.create_payload(
-            user_id=self.user_id, session_id=self.id, device_id=device_id
+            user_id=self.user_id, session_id=self.id, device_id=self.device_id
         )
         return jwt.encode(token_payload, self.secret, algorithm="HS256")
 
     @classmethod
-    def create_item(cls, user_id: str):
+    def create_item(cls, user_id: str, device_id: str):
         return cls(
             id=uuid4().hex,
             user_id=user_id,
+            device_id=device_id,
             secret=uuid4().hex,
         )
 

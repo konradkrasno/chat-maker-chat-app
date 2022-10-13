@@ -6,13 +6,12 @@ from typing import Dict, List, Optional, Union
 from uuid import uuid4
 
 import jwt
-from fastapi import Depends
-from jwt.exceptions import InvalidSignatureError
-
 from chat_app.exceptions import ItemDoesNotExistsError
 from chat_app.models import Chat, Message, Session, User, UserCreds
 from chat_app.repos import ChatRepo, SessionRepo, UserChatsRepo, UserCredsRepo, UserRepo
 from chat_app.settings import ApiSettings, get_api_settings
+from fastapi import Depends
+from jwt.exceptions import InvalidSignatureError
 
 
 class BaseDao(ABC):
@@ -82,16 +81,18 @@ class UserDao(BaseDao):
         return user
 
     def login(self, email: str, password: str, device_id: str) -> Optional[str]:
-        user_creds = self._user_creds.get_item(key=email)
+        user_creds = self._user_creds.get_item(email)
         if user_creds.is_valid(password=password):
-            session = Session.create_item(user_id=user_creds.user_id)
+            session = Session.create_item(
+                user_id=user_creds.user_id, device_id=device_id
+            )
             self._session.update_item(item=session)
             self._dump_data(_type="session")
-            return session.generate_token(device_id=device_id)
+            return session.generate_token()
 
     def authenticate(self, token: str, user_id: str, device_id: str) -> bool:
         try:
-            session = self._session.get_item(key=user_id)
+            session = self._session.get_item(user_id, device_id)
         except ItemDoesNotExistsError:
             return False
         try:
@@ -103,8 +104,9 @@ class UserDao(BaseDao):
                 return True
         return False
 
-    def logout(self, user_id: str):
-        pass
+    def logout(self, user_id: str, device_id: str):
+        self._session.delete_item(user_id, device_id)
+        self._dump_data("session")
 
 
 class ChatDao(BaseDao):

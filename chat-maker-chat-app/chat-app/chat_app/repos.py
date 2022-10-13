@@ -1,12 +1,12 @@
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List
 
 from chat_app.exceptions import ItemAlreadyExistsError, ItemDoesNotExistsError
 from chat_app.models import Chat, Session, User, UserChats, UserCreds
 
 
 class AbstractRepo(dict):
-    repo_key = "id"
-    unique_fields = [repo_key]
+    repo_key = ("id",)
+    unique_fields = ("id",)
 
     @classmethod
     def _base_load_from_dict(cls, data: Dict, model: Any):
@@ -18,20 +18,37 @@ class AbstractRepo(dict):
     def serialize(self) -> Dict:
         return {k: v.dict() for k, v in self.items()}
 
-    def get_item(self, key: str) -> Any:
+    def get_item(self, *attrs) -> Any:
+        key = self._create_key(*attrs)
         item = self.get(key)
         if item:
             return item
         raise ItemDoesNotExistsError(f"Can not find item with provided key: '{key}'.")
 
+    def delete_item(self, *attrs) -> None:
+        try:
+            del self[self._create_key(*attrs)]
+        except KeyError:
+            pass
+
+    @staticmethod
+    def _create_key(*args) -> str:
+        return "{}{}".format(
+            args[0],
+            "".join(f"-{attr}" for attr in args[1:]),
+        )
+
     @classmethod
-    def _get_key_from_item(cls, item: Any) -> Union[str, int]:
-        return getattr(item, cls.repo_key)
+    def _get_key_from_item(cls, item: Any) -> str:
+        attrs = [getattr(item, field) for field in cls.repo_key]
+        return cls._create_key(*attrs)
 
     def put_item(self, item: Any) -> None:
         key = self._get_key_from_item(item)
         if key in self.keys():
-            raise ItemAlreadyExistsError(f"{item.__class__.__name__} with key: '{key}' already exists")
+            raise ItemAlreadyExistsError(
+                f"{item.__class__.__name__} with key: '{key}' already exists"
+            )
         for _obj in self.values():
             for field in self.unique_fields:
                 f_v = getattr(item, field)
@@ -65,7 +82,8 @@ class UserCredsRepo(AbstractRepo):
         value: User credentials
     """
 
-    repo_key = "email"
+    repo_key = ("email",)
+    unique_fields = ("email",)
 
     @classmethod
     def load_from_dict(cls, data: Dict):
@@ -79,7 +97,8 @@ class SessionRepo(AbstractRepo):
         value: Chat object
     """
 
-    repo_key = "user_id"
+    repo_key = ("user_id", "device_id")
+    unique_fields = ("user_id",)
 
     @classmethod
     def load_from_dict(cls, data: Dict):
@@ -105,7 +124,8 @@ class UserChatsRepo(AbstractRepo):
         value: UserChats object
     """
 
-    repo_key = "user_id"
+    repo_key = ("user_id",)
+    unique_fields = ("user_id",)
 
     @classmethod
     def load_from_dict(cls, data: Dict):

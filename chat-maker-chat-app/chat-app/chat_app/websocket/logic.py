@@ -1,10 +1,9 @@
-from fastapi import Depends, WebSocket, WebSocketDisconnect
-
 from chat_app.dao import ChatDao, get_chat_dao
 from chat_app.websocket.connection_manager import (
     ConnectionManager,
     get_connection_manager,
 )
+from fastapi import Depends, WebSocket, WebSocketDisconnect
 
 
 async def websocket_endpoint(

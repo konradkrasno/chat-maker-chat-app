@@ -1,6 +1,3 @@
-from fastapi import Depends, status
-from fastapi.responses import HTMLResponse, JSONResponse
-
 from chat_app.api.models import (
     AuthenticationHeaders,
     BaseHeaders,
@@ -8,6 +5,8 @@ from chat_app.api.models import (
     SignInRequestModel,
 )
 from chat_app.dao import UserDao, get_user_dao
+from fastapi import Depends, status
+from fastapi.responses import JSONResponse
 
 
 async def login(
@@ -24,9 +23,13 @@ async def login(
     )
 
 
-async def logout():
-    # TODO finish
-    return HTMLResponse("Logout endpoint")
+async def logout(
+    user_id: str,
+    headers: BaseHeaders = Depends(BaseHeaders.get_headers),
+    user_dao: UserDao = Depends(get_user_dao),
+):
+    user_dao.logout(user_id, headers.device_id)
+    return JSONResponse({"ok": "User logged out"})
 
 
 async def sign_in(
