@@ -4,7 +4,12 @@
 
 venv/
 
-**/chat_maker_chat_chat_app.egg-info/**
+**/chat_maker_auth_service.egg-info/**
+**/chat_maker_user_service.egg-info/**
+**/chat_maker_chat_service.egg-info/**
+**/chat_maker_websocket_service.egg-info/**
+**/chat_maker_commons.egg-info/**
+
 **/chat-maker-app-artifacts/**
 
 .env

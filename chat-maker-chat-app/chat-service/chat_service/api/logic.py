@@ -1,0 +1,39 @@
+from chat_service.dao import ChatDao, get_chat_dao
+from fastapi import Depends
+from fastapi.responses import HTMLResponse, JSONResponse
+
+from commons.exceptions import ItemDoesNotExistsError
+
+
+async def root():
+    return HTMLResponse("Hello World")
+
+
+async def get_user_chats(
+    user_id: str, dao: ChatDao = Depends(get_chat_dao)
+) -> JSONResponse:
+    try:
+        chats = dao.get_user_chats(user_id)
+    except ItemDoesNotExistsError as e:
+        return JSONResponse({"error": str(e)})
+    return JSONResponse({chat.id: chat.dict() for chat in chats})
+
+
+async def get_user_chat(
+    user_id: str, chat_id: str, dao: ChatDao = Depends(get_chat_dao)
+) -> JSONResponse:
+    try:
+        chat = dao.get_user_chat(user_id, chat_id)
+    except ItemDoesNotExistsError as e:
+        return JSONResponse({"error": str(e)})
+    return JSONResponse(chat.dict())
+
+
+async def get_chats_members_info(
+    user_id: str, dao: ChatDao = Depends(get_chat_dao)
+) -> JSONResponse:
+    try:
+        members_info = dao.get_chats_members_info(user_id)
+    except ItemDoesNotExistsError as e:
+        return JSONResponse({"error": str(e)})
+    return JSONResponse(members_info)

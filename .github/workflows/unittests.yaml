@@ -15,8 +15,20 @@ jobs:
         with:
           python-version: '3.8'
 
-      - name: Install chat-app
-        run: pip install chat-maker-chat-app/chat-app
+      - name: Install commons
+        run: pip install chat-maker-chat-app/commons
+
+      - name: Install chat-service
+        run: pip install chat-maker-chat-app/chat-service
+
+      - name: Install user-service
+        run: pip install chat-maker-chat-app/user-service
+
+      - name: Install auth-service
+        run: pip install chat-maker-chat-app/auth-service
+
+      - name: Install websocket-service
+        run: pip install chat-maker-chat-app/websocket-service
 
       - name: Install Requirements
         run: pip install -r tests/requirements.txt

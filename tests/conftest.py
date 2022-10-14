@@ -3,8 +3,8 @@ from pathlib import Path
 from typing import Dict
 
 import pytest
-from chat_app.dao import ChatDao, UserDao, get_chat_dao, get_user_dao
-from chat_app.settings import ApiSettings, get_api_settings
+from chat_service.dao import ChatDao, UserDao, get_chat_dao, get_user_dao
+from chat_service.settings import ApiSettings, get_api_settings
 from fastapi.testclient import TestClient
 
 BASE_DIR: Path = Path(__name__).resolve().parent
@@ -40,7 +40,7 @@ def chat_dao(settings) -> ChatDao:
 
 @pytest.fixture(scope="session")
 def app_client(settings, chat_dao, user_dao) -> TestClient:
-    from chat_app.app import create_app
+    from chat_service.app import create_app
 
     app = create_app(settings)
     app.dependency_overrides[get_api_settings] = lambda: settings
