@@ -1,5 +1,4 @@
 import pytest
-
 from chat_service.dao import ChatDao, get_chat_dao
 from chat_service.settings import ApiSettings, get_api_settings
 from fastapi.testclient import TestClient

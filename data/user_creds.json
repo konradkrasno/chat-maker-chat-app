@@ -1,0 +1,8 @@
+{
+  "john@doe.com": {
+    "user_id": "7d27972e74ef453aadf07fb441c7e619",
+    "email": "john@doe.com",
+    "password": "e649b8d4d47f7b5e9bbcb171c77010f17d4f85e26cbd2f2b3d109b931d1c69ec",
+    "salt": "45c784"
+  }
+}

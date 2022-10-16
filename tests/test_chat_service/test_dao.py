@@ -1,5 +1,5 @@
 def test_load_users(chat_dao):
-    assert len(chat_dao._users) == 7
+    assert len(chat_dao._users) == 8
 
 
 def test_load_chats(chat_dao):

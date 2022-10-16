@@ -1,10 +1,9 @@
 from typing import Dict
 
 import pytest
-
+from fastapi.testclient import TestClient
 from user_service.dao import UserDao, get_user_dao
 from user_service.settings import ApiSettings, get_api_settings
-from fastapi.testclient import TestClient
 
 
 @pytest.fixture(scope="session")
@@ -34,10 +33,10 @@ def user_service_client(settings, user_dao) -> TestClient:
 
 
 @pytest.fixture(scope="session")
-def sign_in_response() -> Dict:
+def sign_in_request() -> Dict:
     return {
         "name": "John",
         "surname": "Doe",
-        "email": "john@doe.com",
+        "email": "another@johndoe.com",
         "password": "secretpassword",
     }
