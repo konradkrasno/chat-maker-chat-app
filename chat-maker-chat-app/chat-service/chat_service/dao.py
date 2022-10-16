@@ -3,12 +3,11 @@ from typing import Dict, List
 from chat_service.models import Chat, Message
 from chat_service.repos import ChatRepo, UserChatsRepo
 from chat_service.settings import ApiSettings, get_api_settings
+from commons.dao import BaseDao
+from commons.exceptions import ItemDoesNotExistsError
 from fastapi import Depends
 from user_service.models import User
 from user_service.repos import UserRepo
-
-from commons.dao import BaseDao
-from commons.exceptions import ItemDoesNotExistsError
 
 
 class ChatDao(BaseDao):

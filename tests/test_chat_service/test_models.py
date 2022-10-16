@@ -1,5 +1,6 @@
 from chat_service.models import Chat, User, UserChats
-from chat_service.repos import ChatRepo, UserChatsRepo, UserRepo
+from chat_service.repos import ChatRepo, UserChatsRepo
+from user_service.repos import UserRepo
 
 
 def test_user_repo(chat_dao):

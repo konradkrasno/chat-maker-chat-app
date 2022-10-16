@@ -1,9 +1,8 @@
 from auth_service.api.models import AuthenticationHeaders, LoginRequestModel
 from auth_service.dao import AuthDao, get_auth_dao
+from commons.api_models import BaseHeaders
 from fastapi import Depends, status
 from fastapi.responses import JSONResponse
-
-from commons.api_models import BaseHeaders
 
 
 async def login(
