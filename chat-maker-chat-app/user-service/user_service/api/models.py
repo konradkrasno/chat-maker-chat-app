@@ -1,5 +1,5 @@
 import re
-from typing import Optional
+from typing import List, Optional
 
 from commons.api_models import BaseRequestModel
 from pydantic import validator
@@ -23,3 +23,7 @@ class SignInRequestModel(BaseRequestModel):
         if len(v) < 7:
             raise ValueError("Password must have at least 8 chars")
         return v
+
+
+class GetUsersByIdsRequestModel(BaseRequestModel):
+    user_ids: List[str]

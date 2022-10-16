@@ -3,25 +3,26 @@ from typing import Dict, List
 from chat_service.models import Chat, Message
 from chat_service.repos import ChatRepo, UserChatsRepo
 from chat_service.settings import ApiSettings, get_api_settings
+from commons.clients import UserServiceClient, get_user_service_client
 from commons.dao import BaseDao
 from commons.exceptions import ItemDoesNotExistsError
 from fastapi import Depends
-from user_service.models import User
-from user_service.repos import UserRepo
 
 
 class ChatDao(BaseDao):
-    def __init__(self, settings: ApiSettings = Depends(get_api_settings)):
+    def __init__(
+        self,
+        settings: ApiSettings = Depends(get_api_settings),
+        user_service_client: UserServiceClient = Depends(get_user_service_client),
+    ):
         super().__init__(settings=settings)
-        # TODO get rid of _users repo from this dao
-        self._users = UserRepo.load_from_dict(self._load_data("users"))
         self._chats = ChatRepo.load_from_dict(self._load_data("chats"))
         self._users_chats = UserChatsRepo.load_from_dict(self._load_data("users_chats"))
+        self._user_service_client = user_service_client
 
     def _get_file_path(self, _type: str) -> str:
         super()._get_file_path(_type)
         file_path_map = {
-            "users": "users.json",
             "chats": "chats.json",
             "users_chats": "users_chats.json",
         }
@@ -40,20 +41,22 @@ class ChatDao(BaseDao):
         )
 
     @staticmethod
-    def _collect_member_info(member: User) -> Dict:
+    def _collect_member_info(member: Dict) -> Dict:
         return {
-            **member.dict(),
+            **member,
             "active": True,
             "status": " ",
             "lastSeen": "online",
         }
 
-    def get_chats_members_info(self, user_id: str) -> Dict[str, List]:
+    async def get_chats_members_info(self, user_id: str) -> Dict[str, List]:
         chats = self.get_user_chats(user_id)
         return {
             chat.id: [
-                self._collect_member_info(self._users.get_item(member_id))
-                for member_id in chat.members
+                self._collect_member_info(member)
+                for member in await self._user_service_client.get_users_by_ids(
+                    user_id=user_id, query_ids=chat.members
+                )
             ]
             for chat in chats
         }
@@ -65,5 +68,8 @@ class ChatDao(BaseDao):
         self._dump_data("chats")
 
 
-def get_chat_dao(settings: ApiSettings = Depends(get_api_settings)) -> ChatDao:
-    return ChatDao(settings=settings)
+def get_chat_dao(
+    settings: ApiSettings = Depends(get_api_settings),
+    user_service_client: UserServiceClient = Depends(get_user_service_client),
+) -> ChatDao:
+    return ChatDao(settings=settings, user_service_client=user_service_client)

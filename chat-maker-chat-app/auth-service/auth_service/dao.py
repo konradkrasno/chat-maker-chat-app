@@ -15,7 +15,6 @@ from user_service.repos import UserCredsRepo
 class AuthDao(BaseDao):
     def __init__(self, settings: ApiSettings = Depends(get_api_settings)):
         super().__init__(settings=settings)
-        # TODO remove _user_creds repo from this dao
         self._user_creds = UserCredsRepo.load_from_dict(self._load_data("user_creds"))
         self._session = SessionRepo.load_from_dict(self._load_data("session"))
 
@@ -28,7 +27,6 @@ class AuthDao(BaseDao):
         return file_path_map[_type]
 
     def login(self, email: str, password: str, device_id: str) -> Optional[str]:
-        # TODO use UserService to get user_creds item
         user_creds = self._user_creds.get_item(email)
         if user_creds.is_valid(password=password):
             session = Session.create_item(

@@ -29,7 +29,7 @@ async def get_chats_members_info(
     user_id: str, dao: ChatDao = Depends(get_chat_dao)
 ) -> JSONResponse:
     try:
-        members_info = dao.get_chats_members_info(user_id)
+        members_info = await dao.get_chats_members_info(user_id)
     except ItemDoesNotExistsError as e:
         return JSONResponse({"error": str(e)}, status_code=status.HTTP_404_NOT_FOUND)
     return JSONResponse(members_info)

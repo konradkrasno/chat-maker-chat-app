@@ -12,7 +12,12 @@ from fastapi.testclient import TestClient
 def chat_svc_settings(test_data_dir) -> ApiSettings:
     return ApiSettings(
         STORAGE_TYPE="files",
-        AUTH_SERVICE_URL="fake",
+        AUTH_SERVICE_URL="dummy",
+        AUTH_SERVICE_PORT=500,
+        USER_SERVICE_URL="dummy",
+        USER_SERVICE_PORT=8080,
+        CHAT_SERVICE_URL="dummy",
+        CHAT_SERVICE_PORT=8000,
         DATA_DIR=test_data_dir,
         ALLOW_ORIGINS=["*"],
     )

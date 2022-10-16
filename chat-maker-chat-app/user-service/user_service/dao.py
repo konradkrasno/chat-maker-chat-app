@@ -1,3 +1,4 @@
+from typing import List
 from uuid import uuid4
 
 from commons.dao import BaseDao
@@ -41,6 +42,9 @@ class UserDao(BaseDao):
         self._dump_data("users")
         self._dump_data("user_creds")
         return user
+
+    def get_users_by_ids(self, user_ids: List[str]) -> List[User]:
+        return [self._users[_id] for _id in user_ids]
 
 
 def get_user_dao(settings: ApiSettings = Depends(get_api_settings)) -> UserDao:

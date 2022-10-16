@@ -1,0 +1,46 @@
+version: "3.9"
+services:
+  chat:
+    container_name: chat-maker-chat-service
+    build:
+      context: .
+      dockerfile: ./docker/chat_service/Dockerfile
+    ports:
+      - "8000:8000"
+    hostname: chat-service
+    environment:
+      - STORAGE_TYPE="files"
+      - AUTH_SERVICE_URL=auth.hostname
+      - USER_SERVICE_URL=user.hostname
+      - CHAT_SERVICE_URL=chat.hostname
+      - DATA_DIR="./data"
+      - ALLOW_ORIGINS=["*"]
+  auth:
+    build:
+      context: .
+      dockerfile: ./docker/auth_service/Dockerfile
+    ports:
+      - "5000:5000"
+    hostname: auth-service
+    environment:
+      - STORAGE_TYPE="files"
+      - AUTH_SERVICE_URL=auth.hostname
+      - USER_SERVICE_URL=user.hostname
+      - CHAT_SERVICE_URL=chat.hostname
+      - DATA_DIR="./data"
+      - ALLOW_ORIGINS=["*"]
+  user:
+    container_name: chat-maker-user-service
+    build:
+      context: .
+      dockerfile: ./docker/user_service/Dockerfile
+    ports:
+      - "8080:8080"
+    hostname: user-service
+    environment:
+      - STORAGE_TYPE="files"
+      - AUTH_SERVICE_URL=auth.hostname
+      - USER_SERVICE_URL=user.hostname
+      - CHAT_SERVICE_URL=chat.hostname
+      - DATA_DIR="./data"
+      - ALLOW_ORIGINS=["*"]

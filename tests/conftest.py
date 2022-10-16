@@ -35,7 +35,12 @@ def device_id() -> str:
 def common_settings(test_data_dir) -> CommonSettings:
     return CommonSettings(
         STORAGE_TYPE="files",
-        AUTH_SERVICE_URL="fake",
+        AUTH_SERVICE_URL="dummy",
+        AUTH_SERVICE_PORT=500,
+        USER_SERVICE_URL="dummy",
+        USER_SERVICE_PORT=8080,
+        CHAT_SERVICE_URL="dummy",
+        CHAT_SERVICE_PORT=8000,
         DATA_DIR=test_data_dir,
         ALLOW_ORIGINS=["*"],
     )

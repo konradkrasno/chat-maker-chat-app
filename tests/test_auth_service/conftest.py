@@ -11,7 +11,12 @@ from fastapi.testclient import TestClient
 def auth_svc_settings(test_data_dir) -> ApiSettings:
     return ApiSettings(
         STORAGE_TYPE="files",
-        AUTH_SERVICE_URL="fake",
+        AUTH_SERVICE_URL="dummy",
+        AUTH_SERVICE_PORT=500,
+        USER_SERVICE_URL="dummy",
+        USER_SERVICE_PORT=8080,
+        CHAT_SERVICE_URL="dummy",
+        CHAT_SERVICE_PORT=8000,
         DATA_DIR=test_data_dir,
         ALLOW_ORIGINS=["*"],
     )
@@ -46,7 +51,7 @@ def login_request() -> Dict:
 @pytest.fixture(scope="session")
 def access_token(auth_service_client, login_request, device_id) -> str:
     response = auth_service_client.post(
-        "/user/login", json=login_request, headers={"device_id": device_id}
+        "/auth/login", json=login_request, headers={"device_id": device_id}
     )
     assert response.status_code == 200
     assert "access_token" in response.json()

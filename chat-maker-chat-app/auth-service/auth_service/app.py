@@ -25,4 +25,6 @@ if __name__ == "__main__":
 
     api_settings = get_api_settings()
     app = create_app(api_settings)
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(
+        app, host=api_settings.AUTH_SERVICE_URL, port=api_settings.AUTH_SERVICE_PORT
+    )

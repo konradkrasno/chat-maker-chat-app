@@ -1,7 +1,3 @@
-def test_load_users(chat_dao):
-    assert len(chat_dao._users) == 8
-
-
 def test_load_chats(chat_dao):
     assert len(chat_dao._chats) == 6
     assert chat_dao._chats["chat2"].id == "chat2"

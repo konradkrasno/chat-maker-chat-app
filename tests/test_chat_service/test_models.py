@@ -1,13 +1,5 @@
 from chat_service.models import Chat, User, UserChats
 from chat_service.repos import ChatRepo, UserChatsRepo
-from user_service.repos import UserRepo
-
-
-def test_user_repo(chat_dao):
-    users_data = chat_dao._load_data("users")
-    user_model = UserRepo.load_from_dict(users_data)
-    assert isinstance(user_model, dict)
-    assert isinstance(user_model["u1"], User)
 
 
 def test_chat_repo(chat_dao):

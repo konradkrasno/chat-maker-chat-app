@@ -1,6 +1,6 @@
 from fastapi import Depends
 from fastapi.responses import JSONResponse
-from user_service.api.models import SignInRequestModel
+from user_service.api.models import GetUsersByIdsRequestModel, SignInRequestModel
 from user_service.dao import UserDao, get_user_dao
 
 
@@ -19,3 +19,12 @@ async def sign_in(
     except Exception as e:
         return JSONResponse({"error": f"detail: {e.__str__()}"}, status_code=400)
     return JSONResponse({"user_id": new_user.id})
+
+
+async def get_users_by_ids(
+    request: GetUsersByIdsRequestModel = Depends(
+        GetUsersByIdsRequestModel.load_from_request
+    ),
+    user_dao: UserDao = Depends(get_user_dao),
+):
+    return user_dao.get_users_by_ids(request.user_ids)
