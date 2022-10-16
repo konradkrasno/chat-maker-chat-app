@@ -28,7 +28,6 @@ class ChatDao(BaseDao):
         return file_path_map[_type]
 
     def get_user_chats(self, user_id: str) -> List[Chat]:
-
         chat_ids = self._users_chats.get_user_chats_ids(user_id)
         return [self._chats[chat_id] for chat_id in chat_ids]
 

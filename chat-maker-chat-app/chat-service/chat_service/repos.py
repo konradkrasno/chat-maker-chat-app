@@ -1,6 +1,7 @@
 from typing import Dict, List
 
 from chat_service.models import Chat, UserChats
+from commons.exceptions import ItemDoesNotExistsError
 from commons.repos import AbstractRepo
 
 
@@ -31,7 +32,8 @@ class UserChatsRepo(AbstractRepo):
         return cls._base_load_from_dict(data, UserChats)
 
     def get_user_chats_ids(self, user_id: str) -> List[str]:
-        user_chats = self.get_item(user_id)
-        if user_chats:
-            return user_chats.chat_ids
-        return []
+        try:
+            user_chats = self.get_item(user_id)
+        except ItemDoesNotExistsError:
+            return []
+        return user_chats.chat_ids

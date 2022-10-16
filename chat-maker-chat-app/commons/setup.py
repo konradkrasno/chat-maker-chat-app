@@ -7,5 +7,6 @@ setup(
     install_requires=[
         "fastapi==0.78.0",
         "uvicorn[standard]",
+        "requests==2.28.1",
     ],
 )
