@@ -8,7 +8,7 @@ from user_service.settings import ApiSettings, get_api_settings
 
 
 @pytest.fixture(scope="session")
-def user_svc_settings(test_data_dir, auth_service_client) -> ApiSettings:
+def user_svc_settings(test_data_dir) -> ApiSettings:
     return ApiSettings(
         STORAGE_TYPE="files",
         AUTH_SERVICE_URL="fake",

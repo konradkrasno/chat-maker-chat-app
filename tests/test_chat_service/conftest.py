@@ -1,6 +1,9 @@
+from unittest.mock import patch
+
 import pytest
 from chat_service.dao import ChatDao, get_chat_dao
 from chat_service.settings import ApiSettings, get_api_settings
+from commons.clients import AuthServiceClient
 from commons.settings import get_common_settings
 from fastapi.testclient import TestClient
 
@@ -31,3 +34,9 @@ def chat_service_client(common_settings, chat_svc_settings, chat_dao) -> TestCli
 
     with TestClient(app) as client:
         yield client
+
+
+@pytest.fixture(scope="function")
+def mock_authenticate() -> None:
+    with patch.object(AuthServiceClient, "authenticate", return_value=True):
+        yield
