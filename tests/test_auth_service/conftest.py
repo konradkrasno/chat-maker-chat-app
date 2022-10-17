@@ -12,7 +12,7 @@ def auth_svc_settings(test_data_dir) -> ApiSettings:
     return ApiSettings(
         STORAGE_TYPE="files",
         AUTH_SERVICE_URL="dummy",
-        AUTH_SERVICE_PORT=500,
+        AUTH_SERVICE_PORT=5000,
         USER_SERVICE_URL="dummy",
         USER_SERVICE_PORT=8080,
         CHAT_SERVICE_URL="dummy",
@@ -23,8 +23,8 @@ def auth_svc_settings(test_data_dir) -> ApiSettings:
 
 
 @pytest.fixture(scope="session")
-def auth_dao(auth_svc_settings) -> AuthDao:
-    return AuthDao(auth_svc_settings)
+def auth_dao(auth_svc_settings, user_service_client_mock) -> AuthDao:
+    return AuthDao(auth_svc_settings, user_service_client=user_service_client_mock)
 
 
 @pytest.fixture(scope="session")
