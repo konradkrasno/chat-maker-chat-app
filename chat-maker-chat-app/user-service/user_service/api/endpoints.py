@@ -16,3 +16,10 @@ def endpoints(app: FastAPI):
         methods=["POST"],
         dependencies=[Depends(verify_token)],
     )
+
+    app.add_api_route(
+        "/user/creds",
+        logic.get_user_creds,
+        methods=["POST"],
+        # constrain only to backend network
+    )

@@ -46,6 +46,12 @@ class UserServiceClient(BaseClient):
     async def sign_in(self, request_body: Dict) -> None:
         pass
 
+    async def get_user_creds(self, email: str) -> Dict:
+        response = requests.post(self._get_url(f"/user/creds"), json={"email": email})
+        if response.status_code == 200:
+            return response.json()
+        raise HTTPException(status_code=response.status_code, detail=response.text)
+
 
 def get_auth_service_client(
     request: Request,

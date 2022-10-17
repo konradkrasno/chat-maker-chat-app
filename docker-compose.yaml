@@ -9,13 +9,17 @@ services:
       - "8000:8000"
     hostname: chat-service
     environment:
-      - STORAGE_TYPE="files"
-      - AUTH_SERVICE_URL=auth.hostname
-      - USER_SERVICE_URL=user.hostname
-      - CHAT_SERVICE_URL=chat.hostname
-      - DATA_DIR="./data"
+      - STORAGE_TYPE=files
+      - AUTH_SERVICE_URL=auth-service
+      - AUTH_SERVICE_PORT=5000
+      - USER_SERVICE_URL=user-service
+      - USER_SERVICE_PORT=8080
+      - CHAT_SERVICE_URL=chat-service
+      - CHAT_SERVICE_PORT=8000
+      - DATA_DIR=/app/data
       - ALLOW_ORIGINS=["*"]
   auth:
+    container_name: chat-maker-auth-service
     build:
       context: .
       dockerfile: ./docker/auth_service/Dockerfile
@@ -23,11 +27,14 @@ services:
       - "5000:5000"
     hostname: auth-service
     environment:
-      - STORAGE_TYPE="files"
-      - AUTH_SERVICE_URL=auth.hostname
-      - USER_SERVICE_URL=user.hostname
-      - CHAT_SERVICE_URL=chat.hostname
-      - DATA_DIR="./data"
+      - STORAGE_TYPE=files
+      - AUTH_SERVICE_URL=auth-service
+      - AUTH_SERVICE_PORT=5000
+      - USER_SERVICE_URL=user-service
+      - USER_SERVICE_PORT=8080
+      - CHAT_SERVICE_URL=chat-service
+      - CHAT_SERVICE_PORT=8000
+      - DATA_DIR=/app/data
       - ALLOW_ORIGINS=["*"]
   user:
     container_name: chat-maker-user-service
@@ -38,9 +45,12 @@ services:
       - "8080:8080"
     hostname: user-service
     environment:
-      - STORAGE_TYPE="files"
-      - AUTH_SERVICE_URL=auth.hostname
-      - USER_SERVICE_URL=user.hostname
-      - CHAT_SERVICE_URL=chat.hostname
-      - DATA_DIR="./data"
+      - STORAGE_TYPE=files
+      - AUTH_SERVICE_URL=auth-service
+      - AUTH_SERVICE_PORT=5000
+      - USER_SERVICE_URL=user-service
+      - USER_SERVICE_PORT=8080
+      - CHAT_SERVICE_URL=chat-service
+      - CHAT_SERVICE_PORT=8000
+      - DATA_DIR=/app/data
       - ALLOW_ORIGINS=["*"]

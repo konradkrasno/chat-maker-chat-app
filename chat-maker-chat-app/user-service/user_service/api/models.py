@@ -27,3 +27,7 @@ class SignInRequestModel(BaseRequestModel):
 
 class GetUsersByIdsRequestModel(BaseRequestModel):
     user_ids: List[str]
+
+
+class GetUserCredsRequestModel(BaseRequestModel):
+    email: str

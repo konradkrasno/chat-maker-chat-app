@@ -10,7 +10,9 @@ async def login(
     request: LoginRequestModel = Depends(LoginRequestModel.load_from_request),
     auth_dao: AuthDao = Depends(get_auth_dao),
 ):
-    access_token = auth_dao.login(request.email, request.password, headers.device_id)
+    access_token = await auth_dao.login(
+        request.email, request.password, headers.device_id
+    )
     if access_token:
         return JSONResponse({"access_token": access_token})
     return JSONResponse(
