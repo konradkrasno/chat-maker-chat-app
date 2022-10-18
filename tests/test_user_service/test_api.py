@@ -17,3 +17,11 @@ def test_sign_in_when_user_exists(user_service_client, sign_in_request, fake_use
     assert response.json() == {
         "error": f"detail: User with key: '{fake_user_id}' already exists"
     }
+
+
+def test_get_user_creds_when_host_not_allowed(user_service_client):
+    response = user_service_client.post("/user/creds", json={"email": "john@doe.com"})
+    assert response.status_code == 400
+    assert response.json() == {
+        "detail": "IP testclient is not allowed to access this resource."
+    }

@@ -1,9 +1,12 @@
-from commons.dependencies import verify_token
+import socket
+
+from commons.dependencies import constrain_access, verify_token
 from fastapi import Depends, FastAPI
 from user_service.api import logic
+from user_service.settings import ApiSettings
 
 
-def endpoints(app: FastAPI):
+def endpoints(app: FastAPI, settings: ApiSettings):
     app.add_api_route(
         "/user/sign-in",
         logic.sign_in,
@@ -21,5 +24,14 @@ def endpoints(app: FastAPI):
         "/user/creds",
         logic.get_user_creds,
         methods=["POST"],
-        # constrain only to backend network
+        dependencies=[
+            Depends(
+                constrain_access(
+                    allowed_hosts=[
+                        socket.gethostbyname(settings.AUTH_SERVICE_URL),
+                        socket.gethostbyname(settings.CHAT_SERVICE_URL),
+                    ]
+                )
+            )
+        ],
     )

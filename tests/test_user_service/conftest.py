@@ -30,7 +30,11 @@ def user_dao(user_svc_settings) -> UserDao:
 
 @pytest.fixture(scope="session")
 def user_service_client(
-    common_settings, user_svc_settings, user_dao, auth_service_client_mock
+    common_settings,
+    user_svc_settings,
+    user_dao,
+    mock_auth_service_client,
+    mock_resolve_hostname,
 ) -> TestClient:
     from user_service.app import create_app
 
@@ -38,7 +42,7 @@ def user_service_client(
     app.dependency_overrides[get_common_settings] = lambda: common_settings
     app.dependency_overrides[get_api_settings] = lambda: user_svc_settings
     app.dependency_overrides[get_user_dao] = lambda: user_dao
-    app.dependency_overrides[get_auth_service_client] = lambda: auth_service_client_mock
+    app.dependency_overrides[get_auth_service_client] = lambda: mock_auth_service_client
 
     with TestClient(app) as client:
         yield client

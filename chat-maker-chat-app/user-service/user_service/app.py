@@ -15,7 +15,7 @@ def create_app(settings: ApiSettings) -> FastAPI:
         allow_headers=["*"],
     )
 
-    service_endpoints(app)
+    service_endpoints(app, settings)
 
     return app
 

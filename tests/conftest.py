@@ -1,7 +1,8 @@
 import asyncio
 import shutil
 from pathlib import Path
-from unittest.mock import MagicMock
+from typing import Dict
+from unittest.mock import MagicMock, patch
 
 import pytest
 from commons.clients import AuthServiceClient, UserServiceClient
@@ -50,23 +51,35 @@ def common_settings(test_data_dir) -> CommonSettings:
 
 
 @pytest.fixture(scope="session")
-def auth_service_client_mock() -> AuthServiceClient:
+def mock_auth_service_client() -> AuthServiceClient:
     client = MagicMock()
     client.authenticate = MagicMock(return_value=True)
     return client
 
 
 @pytest.fixture(scope="session")
-def user_service_client_mock() -> UserServiceClient:
-    user_creds = {
+def user_creds() -> Dict:
+    return {
         "user_id": "7d27972e74ef453aadf07fb441c7e619",
         "email": "john@doe.com",
         "password": "e649b8d4d47f7b5e9bbcb171c77010f17d4f85e26cbd2f2b3d109b931d1c69ec",
         "salt": "45c784",
     }
+
+
+@pytest.fixture(scope="session")
+def mock_user_service_client(user_creds) -> UserServiceClient:
     future = asyncio.Future()
     future.set_result(user_creds)
 
     client = MagicMock()
     client.get_user_creds = MagicMock(return_value=future)
     return client
+
+
+@pytest.fixture(scope="session")
+def mock_resolve_hostname() -> None:
+    with patch(
+        "user_service.api.endpoints.socket.gethostbyname", return_value="127.0.0.1"
+    ):
+        yield

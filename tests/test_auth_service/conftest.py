@@ -23,8 +23,8 @@ def auth_svc_settings(test_data_dir) -> ApiSettings:
 
 
 @pytest.fixture(scope="session")
-def auth_dao(auth_svc_settings, user_service_client_mock) -> AuthDao:
-    return AuthDao(auth_svc_settings, user_service_client=user_service_client_mock)
+def auth_dao(auth_svc_settings, mock_user_service_client) -> AuthDao:
+    return AuthDao(auth_svc_settings, user_service_client=mock_user_service_client)
 
 
 @pytest.fixture(scope="session")

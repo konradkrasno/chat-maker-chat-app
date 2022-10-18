@@ -22,13 +22,13 @@ def chat_svc_settings(test_data_dir) -> ApiSettings:
 
 
 @pytest.fixture(scope="session")
-def chat_dao(chat_svc_settings, user_service_client_mock) -> ChatDao:
-    return ChatDao(chat_svc_settings, user_service_client=user_service_client_mock)
+def chat_dao(chat_svc_settings, mock_user_service_client) -> ChatDao:
+    return ChatDao(chat_svc_settings, user_service_client=mock_user_service_client)
 
 
 @pytest.fixture(scope="session")
 def chat_service_client(
-    common_settings, chat_svc_settings, chat_dao, auth_service_client_mock
+    common_settings, chat_svc_settings, chat_dao, mock_auth_service_client
 ) -> TestClient:
     from chat_service.app import create_app
 
@@ -36,7 +36,7 @@ def chat_service_client(
     app.dependency_overrides[get_common_settings] = lambda: common_settings
     app.dependency_overrides[get_api_settings] = lambda: chat_svc_settings
     app.dependency_overrides[get_chat_dao] = lambda: chat_dao
-    app.dependency_overrides[get_auth_service_client] = lambda: auth_service_client_mock
+    app.dependency_overrides[get_auth_service_client] = lambda: mock_auth_service_client
 
     with TestClient(app) as client:
         yield client
