@@ -59,9 +59,10 @@ class AuthDao(BaseDao):
                 return True
         return False
 
-    def logout(self, user_id: str, device_id: str):
-        self._session.delete_item(user_id, device_id)
-        self._dump_data("session")
+    def logout(self, token: str, user_id: str, device_id: str):
+        if self.authenticate(token, user_id, device_id):
+            self._session.delete_item(user_id, device_id)
+            self._dump_data("session")
 
 
 def get_auth_dao(

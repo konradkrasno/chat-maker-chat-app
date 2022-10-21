@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: chat-maker-chat-service
+  name: chat-maker-chat-service
+spec:
+  ports:
+  - nodePort: 32121
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: chat-maker-chat-service
+  type: NodePort
+status:
+  loadBalancer: {}

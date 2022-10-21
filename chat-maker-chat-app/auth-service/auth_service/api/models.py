@@ -1,7 +1,7 @@
 from commons.api_models import BaseHeaders, BaseRequestModel
 
 
-class AuthenticationHeaders(BaseHeaders):
+class AuthHeaders(BaseHeaders):
     authorization: str
 
 

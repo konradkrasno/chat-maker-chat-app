@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: chat-maker-user-service
+  name: chat-maker-user-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chat-maker-user-service
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: chat-maker-user-service
+    spec:
+      containers:
+        - image: localhost:32000/chat-maker-user-service
+          name: chat-maker-user-service
+          ports:
+            - containerPort: 80
+          resources: {}
+          env:
+            - name: AUTH_SERVICE_URL
+              value: "0.0.0.0"
+            - name: AUTH_SERVICE_PORT
+              value: "80"
+            - name: USER_SERVICE_URL
+              value: "0.0.0.0"
+            - name: USER_SERVICE_PORT
+              value: "80"
+            - name: CHAT_SERVICE_URL
+              value: "0.0.0.0"
+            - name: CHAT_SERVICE_PORT
+              value: "80"
+            - name: STORAGE_TYPE
+              value: "files"
+            - name: DATA_DIR
+              value: "app/data"
+            - name: ALLOW_ORIGINS
+              value: '["*"]'
+status: {}

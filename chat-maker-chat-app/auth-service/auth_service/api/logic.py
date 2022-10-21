@@ -1,4 +1,4 @@
-from auth_service.api.models import AuthenticationHeaders, LoginRequestModel
+from auth_service.api.models import AuthHeaders, LoginRequestModel
 from auth_service.dao import AuthDao, get_auth_dao
 from commons.api_models import BaseHeaders
 from fastapi import Depends, status
@@ -23,16 +23,20 @@ async def login(
 
 async def logout(
     user_id: str,
-    headers: BaseHeaders = Depends(BaseHeaders.get_headers),
+    headers: AuthHeaders = Depends(AuthHeaders.get_headers),
     auth_dao: AuthDao = Depends(get_auth_dao),
 ):
-    auth_dao.logout(user_id, headers.device_id)
+    auth_dao.logout(
+        token=headers.authorization.replace("Bearer ", ""),
+        user_id=user_id,
+        device_id=headers.device_id,
+    )
     return JSONResponse({"ok": "User logged out"})
 
 
 async def authenticate(
     user_id: str,
-    headers: AuthenticationHeaders = Depends(AuthenticationHeaders.get_headers),
+    headers: AuthHeaders = Depends(AuthHeaders.get_headers),
     auth_dao: AuthDao = Depends(get_auth_dao),
 ):
     if auth_dao.authenticate(
