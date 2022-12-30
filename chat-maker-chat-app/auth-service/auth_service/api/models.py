@@ -1,8 +1,4 @@
-from commons.api_models import BaseHeaders, BaseRequestModel
-
-
-class AuthHeaders(BaseHeaders):
-    authorization: str
+from commons.api_models import BaseRequestModel
 
 
 class LoginRequestModel(BaseRequestModel):

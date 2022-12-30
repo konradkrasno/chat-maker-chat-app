@@ -1,9 +1,10 @@
 from typing import Dict, List
 
 import requests
-from commons.settings import CommonSettings, get_common_settings
 from fastapi import Depends, HTTPException, Request
 from starlette.datastructures import Headers
+
+from commons.settings import CommonSettings, get_common_settings
 
 
 class BaseClient:

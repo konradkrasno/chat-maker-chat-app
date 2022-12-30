@@ -1,6 +1,7 @@
 from typing import Dict
 
 from auth_service.models import Session
+
 from commons.repos import AbstractRepo
 
 

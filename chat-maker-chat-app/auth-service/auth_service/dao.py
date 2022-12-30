@@ -5,12 +5,13 @@ import jwt
 from auth_service.models import Session
 from auth_service.repos import SessionRepo
 from auth_service.settings import ApiSettings, get_api_settings
-from commons.clients import UserServiceClient, get_user_service_client
-from commons.dao import BaseDao
-from commons.exceptions import ItemDoesNotExistsError
 from fastapi import Depends, HTTPException
 from jwt.exceptions import InvalidSignatureError
 from user_service.models import UserCreds
+
+from commons.clients import UserServiceClient, get_user_service_client
+from commons.dao import BaseDao
+from commons.exceptions import ItemDoesNotExistsError
 
 
 class AuthDao(BaseDao):
@@ -31,7 +32,9 @@ class AuthDao(BaseDao):
         }
         return file_path_map[_type]
 
-    async def login(self, email: str, password: str, device_id: str) -> Optional[str]:
+    async def create_session(
+        self, email: str, password: str, device_id: str
+    ) -> Optional[Session]:
         try:
             user_creds_data = await self._user_service_client.get_user_creds(email)
         except HTTPException:
@@ -43,7 +46,7 @@ class AuthDao(BaseDao):
             )
             self._session.update_item(item=session)
             self._dump_data(_type="session")
-            return session.generate_token()
+            return session
 
     def authenticate(self, token: str, user_id: str, device_id: str) -> bool:
         try:

@@ -1,9 +1,10 @@
 import socket
 
-from commons.dependencies import constrain_access, verify_token
 from fastapi import Depends, FastAPI
 from user_service.api import logic
 from user_service.settings import ApiSettings
+
+from commons.dependencies import constrain_access, verify_token
 
 
 def endpoints(app: FastAPI, settings: ApiSettings):

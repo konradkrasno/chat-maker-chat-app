@@ -1,4 +1,3 @@
-from commons.exceptions import ItemDoesNotExistsError
 from fastapi import Depends, status
 from fastapi.responses import JSONResponse
 from user_service.api.models import (
@@ -7,6 +6,8 @@ from user_service.api.models import (
     SignInRequestModel,
 )
 from user_service.dao import UserDao, get_user_dao
+
+from commons.exceptions import ItemDoesNotExistsError
 
 
 async def sign_in(

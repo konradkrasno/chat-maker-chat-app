@@ -1,8 +1,9 @@
 import re
 from typing import List, Optional
 
-from commons.api_models import BaseRequestModel
 from pydantic import validator
+
+from commons.api_models import BaseRequestModel
 
 
 class SignInRequestModel(BaseRequestModel):

@@ -9,5 +9,6 @@ setup(
         "uvicorn[standard]",
         "arrow==1.2.3",
         "PyJWT==2.5.0",
+        "pycryptodome==3.16.0",
     ],
 )

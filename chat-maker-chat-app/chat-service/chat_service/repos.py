@@ -1,6 +1,7 @@
 from typing import Dict, List
 
 from chat_service.models import Chat, UserChats
+
 from commons.exceptions import ItemDoesNotExistsError
 from commons.repos import AbstractRepo
 

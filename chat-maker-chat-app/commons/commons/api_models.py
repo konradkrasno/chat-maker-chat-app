@@ -1,19 +1,7 @@
 import json
 
 from fastapi import HTTPException, Request, status
-from pydantic import BaseModel, ValidationError
-
-
-class BaseHeaders(BaseModel):
-    device_id: str
-
-    @classmethod
-    async def get_headers(cls, request: Request):
-        headers = request.headers
-        try:
-            return cls(**headers)
-        except ValidationError:
-            raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail="Invalid headers")
+from pydantic import BaseModel
 
 
 class BaseRequestModel(BaseModel):
