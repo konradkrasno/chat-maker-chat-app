@@ -9,7 +9,7 @@ def create_app(settings: ApiSettings) -> FastAPI:
 
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=settings.ALLOW_ORIGINS,
+        allow_origins=settings.allow_origins,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -26,5 +26,5 @@ if __name__ == "__main__":
     api_settings = get_api_settings()
     app = create_app(api_settings)
     uvicorn.run(
-        app, host=api_settings.CHAT_SERVICE_URL, port=api_settings.CHAT_SERVICE_PORT
+        app, host=api_settings.chat_service_url, port=api_settings.chat_service_port
     )

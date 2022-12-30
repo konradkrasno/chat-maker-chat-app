@@ -38,15 +38,15 @@ def device_id() -> str:
 @pytest.fixture(scope="session")
 def common_settings(test_data_dir) -> CommonSettings:
     return CommonSettings(
-        STORAGE_TYPE="files",
-        AUTH_SERVICE_URL="dummy",
-        AUTH_SERVICE_PORT=5000,
-        USER_SERVICE_URL="dummy",
-        USER_SERVICE_PORT=8080,
-        CHAT_SERVICE_URL="dummy",
-        CHAT_SERVICE_PORT=8000,
-        DATA_DIR=test_data_dir,
-        ALLOW_ORIGINS=["*"],
+        storage_type="files",
+        auth_service_url="dummy",
+        auth_service_port=5000,
+        user_service_url="dummy",
+        user_service_port=8080,
+        chat_service_url="dummy",
+        chat_service_port=8000,
+        data_dir=test_data_dir,
+        allow_origins=["*"],
     )
 
 

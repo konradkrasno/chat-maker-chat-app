@@ -29,8 +29,8 @@ def endpoints(app: FastAPI, settings: ApiSettings):
             Depends(
                 constrain_access(
                     allowed_hosts=[
-                        socket.gethostbyname(settings.AUTH_SERVICE_URL),
-                        socket.gethostbyname(settings.CHAT_SERVICE_URL),
+                        socket.gethostbyname(settings.auth_service_url),
+                        socket.gethostbyname(settings.chat_service_url),
                     ]
                 )
             )

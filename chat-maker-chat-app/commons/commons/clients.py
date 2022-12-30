@@ -60,8 +60,8 @@ def get_auth_service_client(
 ):
     return AuthServiceClient(
         request=request,
-        service_url=settings.AUTH_SERVICE_URL,
-        service_port=settings.AUTH_SERVICE_PORT,
+        service_url=settings.auth_service_url,
+        service_port=settings.auth_service_port,
     )
 
 
@@ -70,6 +70,6 @@ def get_user_service_client(
 ):
     return UserServiceClient(
         request=request,
-        service_url=settings.USER_SERVICE_URL,
-        service_port=settings.USER_SERVICE_PORT,
+        service_url=settings.user_service_url,
+        service_port=settings.user_service_port,
     )

@@ -10,7 +10,7 @@ from commons.settings import CommonSettings, get_common_settings
 
 class BaseDao(ABC):
     def __init__(self, settings: CommonSettings = Depends(get_common_settings)):
-        self.__storage_type = settings.STORAGE_TYPE
+        self.__storage_type = settings.storage_type
         self._settings = settings
 
     @abstractmethod
@@ -18,7 +18,7 @@ class BaseDao(ABC):
         pass
 
     def _get_base_file_path(self, _type: str) -> Path:
-        return self._settings.DATA_DIR / self._get_file_path(_type)
+        return self._settings.data_dir / self._get_file_path(_type)
 
     def _load_data(self, _type: str) -> Union[Dict, List]:
         if self.__storage_type == "files":

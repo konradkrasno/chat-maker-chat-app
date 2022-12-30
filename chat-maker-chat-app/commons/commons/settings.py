@@ -7,19 +7,19 @@ BASE_DIR: Path = Path(__name__).resolve().parent
 
 
 class CommonSettings(BaseSettings):
-    STORAGE_TYPE: str
+    storage_type: str
 
-    AUTH_SERVICE_URL: str
-    AUTH_SERVICE_PORT: int
+    auth_service_url: str
+    auth_service_port: int
 
-    USER_SERVICE_URL: str
-    USER_SERVICE_PORT: int
+    user_service_url: str
+    user_service_port: int
 
-    CHAT_SERVICE_URL: str
-    CHAT_SERVICE_PORT: int
+    chat_service_url: str
+    chat_service_port: int
 
-    DATA_DIR: Path = BASE_DIR.parent.parent / "data"
-    ALLOW_ORIGINS: List[str] = [
+    data_dir: Path = BASE_DIR.parent.parent / "data"
+    allow_origins: List[str] = [
         "http://localhost:3000",
         "http://localhost",
         "http://chat-maker-frontend",
