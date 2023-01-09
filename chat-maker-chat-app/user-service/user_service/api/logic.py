@@ -11,16 +11,16 @@ from user_service.dao import UserDao, get_user_dao
 
 
 async def sign_in(
-    request: SignInRequestModel,
+    data: SignInRequestModel,
     user_dao: UserDao = Depends(get_user_dao),
 ):
     try:
         new_user = user_dao.create_user(
-            name=request.name,
-            surname=request.surname,
-            email=request.email,
-            password=request.password,
-            avatar_source=request.avatar_source,
+            name=data.name,
+            surname=data.surname,
+            email=data.email,
+            password=data.password,
+            avatar_source=data.avatar_source,
         )
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
@@ -28,11 +28,11 @@ async def sign_in(
 
 
 async def get_users_by_ids(
-    request: GetUsersByIdsRequestModel,
+    data: GetUsersByIdsRequestModel,
     user_dao: UserDao = Depends(get_user_dao),
 ):
     try:
-        return JSONResponse(user_dao.get_users_by_ids(request.user_ids))
+        return JSONResponse(user_dao.get_users_by_ids(data.user_ids))
     except ItemDoesNotExistsError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
 
@@ -48,10 +48,10 @@ async def get_user_by_id(
 
 
 async def get_user_creds(
-    request: GetUserCredsRequestModel,
+    data: GetUserCredsRequestModel,
     user_dao: UserDao = Depends(get_user_dao),
 ):
     try:
-        return JSONResponse(user_dao.get_user_creds(request.email))
+        return JSONResponse(user_dao.get_user_creds(data.email))
     except ItemDoesNotExistsError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
