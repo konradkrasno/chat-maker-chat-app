@@ -20,6 +20,9 @@ class AbstractRepo:
     def __setitem__(self, key: str, value: AbstractModel):
         self._store[key] = value
 
+    def __delitem__(self, key):
+        del self._store[key]
+
     def __len__(self) -> int:
         return len(self._store)
 
