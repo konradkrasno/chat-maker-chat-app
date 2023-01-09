@@ -10,5 +10,6 @@ setup(
         "arrow==1.2.3",
         "PyJWT==2.5.0",
         "pycryptodome==3.16.0",
+        "python-multipart==0.0.5",
     ],
 )

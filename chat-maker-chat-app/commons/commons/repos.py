@@ -1,6 +1,7 @@
-from typing import Any, Dict
+from typing import Dict
 
 from commons.exceptions import ItemAlreadyExistsError, ItemDoesNotExistsError
+from commons.models import AbstractModel
 
 
 class AbstractRepo(dict):
@@ -8,7 +9,7 @@ class AbstractRepo(dict):
     unique_fields = ("id",)
 
     @classmethod
-    def _base_load_from_dict(cls, data: Dict, model: Any):
+    def _base_load_from_dict(cls, data: Dict, model: AbstractModel):
         obj = cls()
         for k, v in data.items():
             obj[k] = model.load_from_dict(**v)
@@ -17,8 +18,9 @@ class AbstractRepo(dict):
     def serialize(self) -> Dict:
         return {k: v.dict() for k, v in self.items()}
 
-    def get_item(self, *attrs) -> Any:
-        key = self._create_key(*attrs)
+    def get_item(self, *attrs) -> AbstractModel:
+        assert len(attrs) > 0, "Item id keys not provided!"
+        key = self._get_key(*attrs)
         item = self.get(key)
         if item:
             return item
@@ -26,23 +28,23 @@ class AbstractRepo(dict):
 
     def delete_item(self, *attrs) -> None:
         try:
-            del self[self._create_key(*attrs)]
+            del self[self._get_key(*attrs)]
         except KeyError:
             pass
 
     @staticmethod
-    def _create_key(*args) -> str:
+    def _get_key(*args) -> str:
         return "{}{}".format(
             args[0],
             "".join(f"-{attr}" for attr in args[1:]),
         )
 
     @classmethod
-    def _get_key_from_item(cls, item: Any) -> str:
+    def _get_key_from_item(cls, item: AbstractModel) -> str:
         attrs = [getattr(item, field) for field in cls.repo_key]
-        return cls._create_key(*attrs)
+        return cls._get_key(*attrs)
 
-    def put_item(self, item: Any) -> None:
+    def put_item(self, item: AbstractModel) -> None:
         key = self._get_key_from_item(item)
         if key in self.keys():
             raise ItemAlreadyExistsError(
@@ -57,6 +59,6 @@ class AbstractRepo(dict):
                     )
         self[key] = item
 
-    def update_item(self, item: Any) -> None:
+    def update_item(self, item: AbstractModel) -> None:
         key = self._get_key_from_item(item)
         self[key] = item

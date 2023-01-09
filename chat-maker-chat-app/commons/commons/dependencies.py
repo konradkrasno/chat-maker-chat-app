@@ -6,10 +6,9 @@ from commons.clients import AuthServiceClient, get_auth_service_client
 
 
 async def verify_token(
-    user_id: str,
     auth_service_client: AuthServiceClient = Depends(get_auth_service_client),
 ) -> None:
-    if not auth_service_client.authenticate(user_id=user_id):
+    if not auth_service_client.authenticate():
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized token."
         )

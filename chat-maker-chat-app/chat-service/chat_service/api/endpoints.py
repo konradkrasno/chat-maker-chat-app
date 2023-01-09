@@ -6,8 +6,8 @@ from commons.dependencies import verify_token
 
 def endpoints(app: FastAPI):
     app.add_api_route(
-        "/",
-        logic.root,
+        "/ping",
+        logic.ping,
         methods=["GET"],
     )
 

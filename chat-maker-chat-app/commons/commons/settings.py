@@ -21,9 +21,13 @@ class CommonSettings(BaseSettings):
     data_dir: Path = BASE_DIR.parent.parent / "data"
     allow_origins: List[str] = [
         "http://localhost:3000",
-        "http://localhost",
-        "http://chat-maker-frontend",
-        "http://localhost:30470",
+        "http://127.0.0.1:3000",
+        "http://localhost:5000",
+        "http://127.0.0.1:5000",
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+        "http://localhost:8080",
+        "http://127.0.0.1:8080",
     ]
 
 

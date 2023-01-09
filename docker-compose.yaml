@@ -35,7 +35,7 @@ services:
       - CHAT_SERVICE_URL=chat-service
       - CHAT_SERVICE_PORT=8000
       - DATA_DIR=/app/data
-      - ALLOW_ORIGINS=["*"]
+      - ENCRYPTION_SECRET_KEY=16bytessecretkey
   user:
     container_name: chat-maker-user-service
     build:

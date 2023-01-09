@@ -38,7 +38,7 @@ class ChatDao(BaseDao):
         if chat_id in chat_ids:
             return self._chats.get_item(chat_id)
         raise ItemDoesNotExistsError(
-            f"Provided chat: '{chat_id}' does not exist or you are not permitted to join."
+            f"Provided chat: '{chat_id}' does not exist or you have no access."
         )
 
     @staticmethod
@@ -56,7 +56,7 @@ class ChatDao(BaseDao):
             chat.id: [
                 self._collect_member_info(member)
                 for member in await self._user_service_client.get_users_by_ids(
-                    user_id=user_id, query_ids=chat.members
+                    query_ids=chat.members
                 )
             ]
             for chat in chats

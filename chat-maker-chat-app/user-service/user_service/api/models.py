@@ -3,10 +3,10 @@ from typing import List, Optional
 
 from pydantic import validator
 
-from commons.api_models import BaseRequestModel
+from pydantic import BaseModel
 
 
-class SignInRequestModel(BaseRequestModel):
+class SignInRequestModel(BaseModel):
     name: str
     surname: str
     email: str
@@ -26,9 +26,9 @@ class SignInRequestModel(BaseRequestModel):
         return v
 
 
-class GetUsersByIdsRequestModel(BaseRequestModel):
+class GetUsersByIdsRequestModel(BaseModel):
     user_ids: List[str]
 
 
-class GetUserCredsRequestModel(BaseRequestModel):
+class GetUserCredsRequestModel(BaseModel):
     email: str

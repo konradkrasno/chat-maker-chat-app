@@ -1,6 +1,6 @@
-from commons.api_models import BaseRequestModel
+from pydantic import BaseModel
 
 
-class LoginRequestModel(BaseRequestModel):
+class LoginRequestModel(BaseModel):
     email: str
     password: str

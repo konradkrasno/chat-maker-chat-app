@@ -8,10 +8,11 @@ from user_service.api.models import (
 from user_service.dao import UserDao, get_user_dao
 
 from commons.exceptions import ItemDoesNotExistsError
+from fastapi.exceptions import HTTPException
 
 
 async def sign_in(
-    request: SignInRequestModel = Depends(SignInRequestModel.load_from_request),
+    request: SignInRequestModel,
     user_dao: UserDao = Depends(get_user_dao),
 ):
     try:
@@ -23,30 +24,34 @@ async def sign_in(
             avatar_source=request.avatar_source,
         )
     except Exception as e:
-        return JSONResponse(
-            {"error": f"detail: {e.__str__()}"}, status_code=status.HTTP_400_BAD_REQUEST
-        )
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=e.__str__())
     return JSONResponse({"user_id": new_user.id})
 
 
 async def get_users_by_ids(
-    request: GetUsersByIdsRequestModel = Depends(
-        GetUsersByIdsRequestModel.load_from_request
-    ),
+    request: GetUsersByIdsRequestModel,
     user_dao: UserDao = Depends(get_user_dao),
 ):
-    return JSONResponse(user_dao.get_users_by_ids(request.user_ids))
+    try:
+        return JSONResponse(user_dao.get_users_by_ids(request.user_ids))
+    except ItemDoesNotExistsError as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=e.__str__())
+
+async def get_user_by_id(
+    user_id: str,
+    user_dao: UserDao = Depends(get_user_dao),
+):
+    try:
+        return user_dao.get_users_by_ids([user_id])[0]
+    except ItemDoesNotExistsError:
+        return JSONResponse({})
 
 
 async def get_user_creds(
-    request: GetUserCredsRequestModel = Depends(
-        GetUserCredsRequestModel.load_from_request
-    ),
+    request: GetUserCredsRequestModel,
     user_dao: UserDao = Depends(get_user_dao),
 ):
     try:
         return JSONResponse(user_dao.get_user_creds(request.email))
     except ItemDoesNotExistsError as e:
-        return JSONResponse(
-            {"error": f"detail: {e.__str__()}"}, status_code=status.HTTP_404_NOT_FOUND
-        )
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=e.__str__())

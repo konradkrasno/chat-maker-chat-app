@@ -15,8 +15,15 @@ def endpoints(app: FastAPI, settings: ApiSettings):
     )
 
     app.add_api_route(
-        "/user/query/{user_id}",
+        "/user/query",
         logic.get_users_by_ids,
+        methods=["POST"],
+        dependencies=[Depends(verify_token)],
+    )
+
+    app.add_api_route(
+        "/user/id/{user_id}",
+        logic.get_user_by_id,
         methods=["POST"],
         dependencies=[Depends(verify_token)],
     )

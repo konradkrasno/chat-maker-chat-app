@@ -1,10 +1,10 @@
 from typing import List
 
-from pydantic import BaseModel
 from user_service.models import User
+from commons.models import AbstractModel
 
 
-class Message(BaseModel):
+class Message(AbstractModel):
     id: str
     sendDate: str
     content: str
@@ -16,7 +16,7 @@ class Message(BaseModel):
         return cls(**kwargs)
 
 
-class Chat(BaseModel):
+class Chat(AbstractModel):
     id: str
     members: List[str]
     messages: List[Message]
@@ -33,7 +33,7 @@ class Chat(BaseModel):
         self.messages.append(message)
 
 
-class UserChats(BaseModel):
+class UserChats(AbstractModel):
     user_id: str
     chat_ids: List[str]
 

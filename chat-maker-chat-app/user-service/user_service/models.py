@@ -1,10 +1,10 @@
 from hashlib import sha256
 from uuid import uuid4
 
-from pydantic import BaseModel
+from commons.models import AbstractModel
 
 
-class User(BaseModel):
+class User(AbstractModel):
     id: str
     avatarSource: str
     name: str
@@ -21,7 +21,7 @@ class User(BaseModel):
         return cls(**kwargs)
 
 
-class UserCreds(BaseModel):
+class UserCreds(AbstractModel):
     user_id: str
     email: str
     password: str

@@ -45,7 +45,7 @@ class UserDao(BaseDao):
         return user
 
     def get_users_by_ids(self, user_ids: List[str]) -> List[Dict]:
-        return [self._users[_id].dict() for _id in user_ids]
+        return [self._users.get_item(_id).dict() for _id in user_ids]
 
     def get_user_creds(self, email: str) -> Dict:
         return self._user_creds.get_item(email).dict()

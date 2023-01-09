@@ -1,12 +1,12 @@
 from chat_service.dao import ChatDao, get_chat_dao
-from fastapi import Depends, status
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi import Depends, status, HTTPException
+from fastapi.responses import JSONResponse
 
 from commons.exceptions import ItemDoesNotExistsError
 
 
-async def root():
-    return HTMLResponse("Hello World")
+async def ping():
+    return "pong"
 
 
 async def get_user_chats(
@@ -22,7 +22,7 @@ async def get_user_chat(
     try:
         chat = dao.get_user_chat(user_id, chat_id)
     except ItemDoesNotExistsError as e:
-        return JSONResponse({"error": str(e)}, status_code=status.HTTP_404_NOT_FOUND)
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=e.__str__())
     return JSONResponse(chat.dict())
 
 
@@ -32,5 +32,5 @@ async def get_chats_members_info(
     try:
         members_info = await dao.get_chats_members_info(user_id)
     except ItemDoesNotExistsError as e:
-        return JSONResponse({"error": str(e)}, status_code=status.HTTP_404_NOT_FOUND)
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=e.__str__())
     return JSONResponse(members_info)
