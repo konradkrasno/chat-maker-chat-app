@@ -26,7 +26,7 @@ def fake_user_id() -> str:
 
 
 @pytest.fixture(scope="session")
-def test_user_id() -> str:
+def user_id() -> str:
     return "7d27972e74ef453aadf07fb441c7e619"
 
 

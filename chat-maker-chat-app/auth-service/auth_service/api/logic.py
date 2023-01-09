@@ -1,9 +1,8 @@
-from fastapi import Cookie, Depends, Form, Header, HTTPException, status
-from fastapi.responses import JSONResponse, RedirectResponse
-
 from auth_service.dao import AuthDao, get_auth_dao
 from auth_service.security import Cipher
 from auth_service.settings import ApiSettings, get_api_settings
+from fastapi import Cookie, Depends, Form, Header, HTTPException, status
+from fastapi.responses import JSONResponse, RedirectResponse
 
 
 async def ping():
@@ -70,14 +69,19 @@ async def authenticate(
     auth_dao: AuthDao = Depends(get_auth_dao),
     settings: ApiSettings = Depends(get_api_settings),
 ):
-    if auth_dao.authenticate(
-        token=Cipher(secret_key=settings.encryption_secret_key).decrypt(access_token),
-        user_id=user_id,
-        device_id=device_id,
-    ):
-        return JSONResponse(
-            {"ok": "User successfully authenticated"}, status_code=status.HTTP_200_OK
-        )
+    try:
+        token = Cipher(secret_key=settings.encryption_secret_key).decrypt(access_token)
+    except (AssertionError, ValueError):
+        pass
+    else:
+        if auth_dao.authenticate(
+            token=token,
+            user_id=user_id,
+            device_id=device_id,
+        ):
+            return JSONResponse(
+                {"ok": "User successfully authenticated"}, status_code=status.HTTP_200_OK
+            )
     raise HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email or password"
+        status_code=status.HTTP_401_UNAUTHORIZED, detail="Token invalid or expired"
     )

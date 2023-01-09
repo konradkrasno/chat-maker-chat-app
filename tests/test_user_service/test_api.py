@@ -15,7 +15,7 @@ def test_sign_in_when_user_exists(user_service_client, sign_in_request, fake_use
         response = user_service_client.post("/user/sign-in", json=sign_in_request)
     assert response.status_code == 400
     assert response.json() == {
-        "error": f"detail: User with key: '{fake_user_id}' already exists"
+        "detail": f"User with key: '{fake_user_id}' already exists"
     }
 
 

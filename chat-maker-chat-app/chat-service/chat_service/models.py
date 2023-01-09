@@ -1,7 +1,7 @@
 from typing import List
 
-from user_service.models import User
 from commons.models import AbstractModel
+from user_service.models import User
 
 
 class Message(AbstractModel):

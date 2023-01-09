@@ -4,16 +4,43 @@ from commons.exceptions import ItemAlreadyExistsError, ItemDoesNotExistsError
 from commons.models import AbstractModel
 
 
-class AbstractRepo(dict):
+class AbstractRepo:
     repo_key = ("id",)
     unique_fields = ("id",)
 
+    def __init__(self):
+        self._store = dict()
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__} repo"
+
+    def __getitem__(self, item: str):
+        return self._store[item]
+
+    def __setitem__(self, key: str, value: AbstractModel):
+        self._store[key] = value
+
+    def __len__(self) -> int:
+        return len(self._store)
+
+    def get(self, key: str) -> AbstractModel:
+        return self._store.get(key)
+
+    def items(self):
+        return self._store.items()
+
+    def keys(self):
+        return self._store.keys()
+
+    def values(self):
+        return self._store.values()
+
     @classmethod
     def _base_load_from_dict(cls, data: Dict, model: AbstractModel):
-        obj = cls()
+        inst = cls()
         for k, v in data.items():
-            obj[k] = model.load_from_dict(**v)
-        return obj
+            inst[k] = model.load_from_dict(**v)
+        return inst
 
     def serialize(self) -> Dict:
         return {k: v.dict() for k, v in self.items()}

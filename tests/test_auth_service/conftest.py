@@ -53,13 +53,15 @@ def login_request() -> Dict:
 @pytest.fixture(scope="session")
 def access_token(auth_service_client, login_request, device_id) -> str:
     response = auth_service_client.post(
-        "/auth/login", json=login_request, headers={"device-id": device_id}
+        "/auth/login",
+        data=login_request,
+        cookies={"device_id": device_id},
     )
-    assert response.status_code == 200
+    assert response.status_code == 302
     assert "access_token" in response.cookies
     return response.cookies["access_token"]
 
 
-@pytest.fixture(scope="session")
-def auth_headers(device_id, access_token) -> Dict:
-    return {"device-id": device_id, "authorization": access_token}
+@pytest.fixture(scope="function")
+def auth_cookies(user_id, device_id, access_token) -> Dict:
+    return {"user_id": user_id, "device_id": device_id, "access_token": access_token}

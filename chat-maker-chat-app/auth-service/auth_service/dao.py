@@ -5,13 +5,12 @@ import jwt
 from auth_service.models import Session
 from auth_service.repos import SessionRepo
 from auth_service.settings import ApiSettings, get_api_settings
-from fastapi import Depends, HTTPException
-from jwt.exceptions import InvalidSignatureError
-from user_service.models import UserCreds
-
 from commons.clients import UserServiceClient, get_user_service_client
 from commons.dao import BaseDao
 from commons.exceptions import ItemDoesNotExistsError
+from fastapi import Depends, HTTPException
+from jwt.exceptions import InvalidSignatureError
+from user_service.models import UserCreds
 
 
 class AuthDao(BaseDao):

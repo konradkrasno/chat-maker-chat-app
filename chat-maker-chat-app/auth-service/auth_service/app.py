@@ -1,8 +1,7 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-
 from auth_service.api.endpoints import endpoints as service_endpoints
 from auth_service.settings import ApiSettings, get_api_settings
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 
 def create_app(settings: ApiSettings) -> FastAPI:

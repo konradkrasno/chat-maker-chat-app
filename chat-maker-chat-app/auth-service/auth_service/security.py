@@ -9,7 +9,7 @@ class CipherObject:
     tag: bytes
     nonce: bytes
 
-    def to_string(self) -> str:
+    def __repr__(self) -> str:
         return f"{self.tag.hex()}.{self.ciphertext.hex()}.{self.nonce.hex()}"
 
     @classmethod
@@ -32,7 +32,7 @@ def _encrypt(secret_key: bytes, plaintext: str) -> str:
     cipher = AES.new(secret_key, AES.MODE_EAX)
     nonce = cipher.nonce
     ciphertext, tag = cipher.encrypt_and_digest(plaintext.encode())
-    return CipherObject(ciphertext, tag, nonce).to_string()
+    return str(CipherObject(ciphertext, tag, nonce))
 
 
 def _decrypt(secret_key: bytes, encrypted_str: str) -> str:

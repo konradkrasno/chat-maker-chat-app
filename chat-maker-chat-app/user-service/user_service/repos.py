@@ -1,8 +1,7 @@
 from typing import Dict
 
-from user_service.models import User, UserCreds
-
 from commons.repos import AbstractRepo
+from user_service.models import User, UserCreds
 
 
 class UserRepo(AbstractRepo):

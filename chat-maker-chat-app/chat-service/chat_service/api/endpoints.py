@@ -1,7 +1,6 @@
 from chat_service.api import logic
-from fastapi import Depends, FastAPI
-
 from commons.dependencies import verify_token
+from fastapi import Depends, FastAPI
 
 
 def endpoints(app: FastAPI):

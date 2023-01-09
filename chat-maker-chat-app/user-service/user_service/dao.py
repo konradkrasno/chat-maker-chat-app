@@ -1,12 +1,11 @@
 from typing import Dict, List
 from uuid import uuid4
 
+from commons.dao import BaseDao
 from fastapi import Depends
 from user_service.models import User, UserCreds
 from user_service.repos import UserCredsRepo, UserRepo
 from user_service.settings import ApiSettings, get_api_settings
-
-from commons.dao import BaseDao
 
 
 class UserDao(BaseDao):

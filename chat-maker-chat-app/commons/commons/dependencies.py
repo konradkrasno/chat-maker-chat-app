@@ -1,8 +1,7 @@
 from typing import Callable, List
 
-from fastapi import Depends, HTTPException, Request, status
-
 from commons.clients import AuthServiceClient, get_auth_service_client
+from fastapi import Depends, HTTPException, Request, status
 
 
 async def verify_token(

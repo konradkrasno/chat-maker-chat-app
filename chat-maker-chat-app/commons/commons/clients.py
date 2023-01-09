@@ -1,10 +1,9 @@
 from typing import Dict, List
 
 import requests
+from commons.settings import CommonSettings, get_common_settings
 from fastapi import Depends, HTTPException, Request
 from starlette.datastructures import Headers
-
-from commons.settings import CommonSettings, get_common_settings
 
 
 class BaseClient:
@@ -52,7 +51,6 @@ class UserServiceClient(BaseClient):
         if response.status_code == 200:
             return response.json()
         raise HTTPException(status_code=response.status_code, detail=response.text)
-
 
     async def sign_in(self, request_body: Dict) -> None:
         pass

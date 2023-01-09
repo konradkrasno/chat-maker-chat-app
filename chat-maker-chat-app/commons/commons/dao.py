@@ -3,9 +3,8 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Dict, List, Union
 
-from fastapi import Depends
-
 from commons.settings import CommonSettings, get_common_settings
+from fastapi import Depends
 
 
 class BaseDao(ABC):
