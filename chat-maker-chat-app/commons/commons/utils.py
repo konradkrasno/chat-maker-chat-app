@@ -1,6 +1,6 @@
 from hashlib import sha256
-from typing import Set
+from typing import List
 
 
-def hash_set(s: Set) -> str:
+def hash_list(s: List) -> str:
     return sha256(str(s).encode()).hexdigest()

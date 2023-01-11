@@ -1,8 +1,1 @@
-{
-  "7d27972e74ef453aadf07fb441c7e619-test-id": {
-    "id": "f3cb885a66d6419da0c4276774b67554",
-    "user_id": "7d27972e74ef453aadf07fb441c7e619",
-    "device_id": "test-id",
-    "secret": "fcc2db5996a3457cb346993bf5fcfa61"
-  }
-}
+{"7d27972e74ef453aadf07fb441c7e619-test-id": {"id": "b1d1fda9cdf24ecd81e90e8f63cc86df", "user_id": "7d27972e74ef453aadf07fb441c7e619", "device_id": "test-id", "secret": "5a5c2a1b9f6d4dfa8e74ef3c893ac5e9"}}

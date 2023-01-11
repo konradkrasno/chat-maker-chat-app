@@ -1,4 +1,4 @@
-from typing import Dict, List, Set
+from typing import Dict, List
 
 from chat_service.models import Chat, ChatMembers, Message
 from chat_service.repos import ChatMembersRepo, ChatRepo, UserChatsRepo
@@ -6,7 +6,7 @@ from chat_service.settings import ApiSettings, get_api_settings
 from commons.clients import UserServiceClient, get_user_service_client
 from commons.dao import BaseDao
 from commons.exceptions import ItemDoesNotExistsError
-from commons.utils import hash_set
+from commons.utils import hash_list
 from fastapi import Depends
 from user_service.models import User
 
@@ -27,6 +27,10 @@ class ChatDao(BaseDao):
         )
         self._user_service_client = user_service_client
 
+    @property
+    def user_id(self) -> str:
+        return self._user_id
+
     def _get_file_path(self, _type: str) -> str:
         super()._get_file_path(_type)
         file_path_map = {
@@ -37,49 +41,49 @@ class ChatDao(BaseDao):
         return file_path_map[_type]
 
     def get_user_chats(self) -> List[Chat]:
-        chat_ids = self._users_chats.get_or_create_user_chats(self._user_id)
+        chat_ids = self._users_chats.get_or_create_user_chats(self.user_id)
         return [self._chats[chat_id] for chat_id in chat_ids]
 
     def get_user_chat(self, chat_id: str) -> Chat:
-        chat_ids = self._users_chats.get_or_create_user_chats(self._user_id)
+        chat_ids = self._users_chats.get_or_create_user_chats(self.user_id)
         if chat_id in chat_ids:
             return self._chats.get_item(chat_id)
         raise ItemDoesNotExistsError(
             f"Provided chat: '{chat_id}' does not exist or you have no access."
         )
 
-    def _prepare_member_ids(self, member_ids: List[str]) -> Set[str]:
-        member_ids.append(self._user_id)
-        return set(member_ids)
+    def _prepare_member_ids(self, member_ids: List[str]) -> List[str]:
+        member_ids.append(self.user_id)
+        return list(set(member_ids))
 
     def get_chat_by_user(self, member_ids: List[str]) -> Chat:
-        member_ids_set = self._prepare_member_ids(member_ids=member_ids)
-        members_hash = hash_set(member_ids_set)
+        member_ids = self._prepare_member_ids(member_ids=member_ids)
+        members_hash = hash_list(member_ids)
         try:
             chat_members = self._chat_members.get_item(members_hash)
         except ItemDoesNotExistsError:
-            return self.create_chat(member_ids)
+            return self.create_chat(member_ids=member_ids)
         return self._chats.get_item(chat_members.chat_id)
 
     async def get_chats_members_info(self) -> Dict[str, List[User]]:
         chats = self.get_user_chats()
-        return {
-            chat.id: [
+        result = {}
+        for chat in chats:
+            members = await self._user_service_client.get_users_by_ids(
+                query_ids=chat.members
+            )
+            result[chat.id] = [
                 User.load_from_dict(**member)
-                for member in await self._user_service_client.get_users_by_ids(
-                    query_ids=list(chat.members)
-                    # TODO add exception for chat with oneself
-                )
-                if member["id"] != self._user_id
+                for member in members
+                if member["id"] != self.user_id or len(members) == 1
             ]
-            for chat in chats
-        }
+        return result
 
     def create_chat(self, member_ids: List[str]) -> Chat:
         chat = Chat.create_item(member_ids)
         self._chats.put_item(chat)
         chat_members = ChatMembers.create_item(
-            members_hash=hash_set(set(member_ids)), chat_id=chat.id
+            members_hash=hash_list(member_ids), chat_id=chat.id
         )
         self._chat_members.put_item(chat_members)
         for _id in member_ids:
