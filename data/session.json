@@ -1,1 +1,8 @@
-{"7d27972e74ef453aadf07fb441c7e619-device-id": {"id": "f8d93d2755a5426dad011dbbb79aa152", "user_id": "7d27972e74ef453aadf07fb441c7e619", "device_id": "device-id", "secret": "9dd1d1b317df4a429c55ef814eccfef2"}}
+{
+  "7d27972e74ef453aadf07fb441c7e619-test-id": {
+    "id": "f3cb885a66d6419da0c4276774b67554",
+    "user_id": "7d27972e74ef453aadf07fb441c7e619",
+    "device_id": "test-id",
+    "secret": "fcc2db5996a3457cb346993bf5fcfa61"
+  }
+}

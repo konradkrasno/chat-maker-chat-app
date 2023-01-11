@@ -22,8 +22,10 @@ def chat_svc_settings(test_data_dir) -> ApiSettings:
 
 
 @pytest.fixture(scope="session")
-def chat_dao(chat_svc_settings, mock_user_service_client) -> ChatDao:
-    return ChatDao(chat_svc_settings, user_service_client=mock_user_service_client)
+def chat_dao(user_id, chat_svc_settings, mock_user_service_client) -> ChatDao:
+    return ChatDao(
+        user_id, chat_svc_settings, user_service_client=mock_user_service_client
+    )
 
 
 @pytest.fixture(scope="session")
@@ -40,3 +42,8 @@ def chat_service_client(
 
     with TestClient(app) as client:
         yield client
+
+
+@pytest.fixture(scope="session")
+def chat_id() -> str:
+    return "3c391b1f58bb46b788d030c34c50a0e6"

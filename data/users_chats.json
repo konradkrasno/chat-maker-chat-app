@@ -1,13 +1,22 @@
 {
+  "u1": { "user_id": "u1", "chat_ids": ["3c391b1f58bb46b788d030c34c50a0e6"] },
   "7d27972e74ef453aadf07fb441c7e619": {
     "user_id": "7d27972e74ef453aadf07fb441c7e619",
     "chat_ids": [
-      "chat1",
-      "chat2",
-      "chat3",
-      "chat4",
-      "chat5",
-      "chat6"
+      "3c391b1f58bb46b788d030c34c50a0e6",
+      "36ba15bd1742473a844d24b616570c39",
+      "4b1bad2c40204a3fb2c49c762aa652d0",
+      "d46288881ed04194b6adeccd7a3a6d3b"
     ]
+  },
+  "u2": { "user_id": "u2", "chat_ids": ["36ba15bd1742473a844d24b616570c39"] },
+  "u3": { "user_id": "u3", "chat_ids": ["4b1bad2c40204a3fb2c49c762aa652d0"] },
+  "8e385dc900b84a2bbeaf1781ea5d75c6": {
+    "user_id": "8e385dc900b84a2bbeaf1781ea5d75c6",
+    "chat_ids": ["d46288881ed04194b6adeccd7a3a6d3b"]
+  },
+  "02bc1f0eb5bd4dd18ff4fca045e2ca36": {
+    "user_id": "02bc1f0eb5bd4dd18ff4fca045e2ca36",
+    "chat_ids": ["d46288881ed04194b6adeccd7a3a6d3b"]
   }
 }

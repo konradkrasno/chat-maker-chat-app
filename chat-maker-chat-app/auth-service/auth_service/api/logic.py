@@ -1,7 +1,7 @@
 from auth_service.dao import AuthDao, get_auth_dao
 from auth_service.security import Cipher
 from auth_service.settings import ApiSettings, get_api_settings
-from fastapi import Cookie, Depends, Form, Header, HTTPException, status
+from fastapi import Cookie, Depends, Form, HTTPException, status
 from fastapi.responses import JSONResponse, RedirectResponse
 
 
@@ -80,7 +80,8 @@ async def authenticate(
             device_id=device_id,
         ):
             return JSONResponse(
-                {"ok": "User successfully authenticated"}, status_code=status.HTTP_200_OK
+                {"ok": "User successfully authenticated"},
+                status_code=status.HTTP_200_OK,
             )
     raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED, detail="Token invalid or expired"

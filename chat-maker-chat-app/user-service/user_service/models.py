@@ -1,4 +1,5 @@
 from hashlib import sha256
+from typing import Optional
 from uuid import uuid4
 
 from commons.models import AbstractModel
@@ -9,9 +10,13 @@ class User(AbstractModel):
     avatarSource: str
     name: str
     surname: str
+    active: Optional[bool] = True
+    status: Optional[str] = " "
+    lastSeen: Optional[str] = "online"
 
     @classmethod
-    def create_item(cls, _id: str, avatar_source: str, name: str, surname: str):
+    def create_item(cls, avatar_source: str, name: str, surname: str):
+        _id = uuid4().hex
         return cls.load_from_dict(
             id=_id, avatarSource=avatar_source, name=name, surname=surname
         )

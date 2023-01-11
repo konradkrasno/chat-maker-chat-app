@@ -3,6 +3,13 @@ import socket
 from commons.dependencies import constrain_access, verify_token
 from fastapi import Depends, FastAPI
 from user_service.api import logic
+from user_service.api.models import (
+    GetUserCredsResponseModel,
+    GetUsersByIdResponseModel,
+    GetUsersByIdsResponseModel,
+    SearchUsersResponseModel,
+    SignInResponseModel,
+)
 from user_service.settings import ApiSettings
 
 
@@ -11,6 +18,7 @@ def endpoints(app: FastAPI, settings: ApiSettings):
         "/user/sign-in",
         logic.sign_in,
         methods=["POST"],
+        response_model=SignInResponseModel,
     )
 
     app.add_api_route(
@@ -18,6 +26,7 @@ def endpoints(app: FastAPI, settings: ApiSettings):
         logic.get_users_by_ids,
         methods=["POST"],
         dependencies=[Depends(verify_token)],
+        response_model=GetUsersByIdsResponseModel,
     )
 
     app.add_api_route(
@@ -25,6 +34,7 @@ def endpoints(app: FastAPI, settings: ApiSettings):
         logic.get_user_by_id,
         methods=["POST"],
         dependencies=[Depends(verify_token)],
+        response_model=GetUsersByIdResponseModel,
     )
 
     app.add_api_route(
@@ -41,4 +51,13 @@ def endpoints(app: FastAPI, settings: ApiSettings):
                 )
             )
         ],
+        response_model=GetUserCredsResponseModel,
+    )
+
+    app.add_api_route(
+        "/user/search",
+        logic.search_users,
+        methods=["GET"],
+        dependencies=[Depends(verify_token)],
+        response_model=SearchUsersResponseModel,
     )

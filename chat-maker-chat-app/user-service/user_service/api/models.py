@@ -2,6 +2,7 @@ import re
 from typing import List, Optional
 
 from pydantic import BaseModel, validator
+from user_service.models import User, UserCreds
 
 
 class SignInRequestModel(BaseModel):
@@ -24,9 +25,29 @@ class SignInRequestModel(BaseModel):
         return v
 
 
+class SignInResponseModel(BaseModel):
+    user_id: str
+
+
 class GetUsersByIdsRequestModel(BaseModel):
     user_ids: List[str]
 
 
+class GetUsersByIdsResponseModel(BaseModel):
+    users: List[User]
+
+
+class GetUsersByIdResponseModel(BaseModel):
+    user: Optional[User] = None
+
+
 class GetUserCredsRequestModel(BaseModel):
     email: str
+
+
+class GetUserCredsResponseModel(BaseModel):
+    user_creds: UserCreds
+
+
+class SearchUsersResponseModel(BaseModel):
+    user: Optional[User] = None

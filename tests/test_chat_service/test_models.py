@@ -3,11 +3,11 @@ from chat_service.repos import ChatRepo, UserChatsRepo
 from commons.repos import AbstractRepo
 
 
-def test_chat_repo(chat_dao):
+def test_chat_repo(chat_dao, chat_id):
     chats_data = chat_dao._load_data("chats")
     chat_model = ChatRepo.load_from_dict(chats_data)
     assert isinstance(chat_model, AbstractRepo)
-    assert isinstance(chat_model["chat2"], Chat)
+    assert isinstance(chat_model[chat_id], Chat)
 
 
 def test_user_chats_repo(chat_dao, user_id):

@@ -48,17 +48,17 @@ class AbstractRepo:
     def serialize(self) -> Dict:
         return {k: v.dict() for k, v in self.items()}
 
-    def get_item(self, *attrs) -> AbstractModel:
-        assert len(attrs) > 0, "Item id keys not provided!"
-        key = self._get_key(*attrs)
+    def get_item(self, *keys) -> AbstractModel:
+        assert len(keys) > 0, "Item id keys not provided!"
+        key = self._get_key(*keys)
         item = self.get(key)
         if item:
             return item
         raise ItemDoesNotExistsError(f"Can not find item with provided key: '{key}'.")
 
-    def delete_item(self, *attrs) -> None:
+    def delete_item(self, *keys) -> None:
         try:
-            del self[self._get_key(*attrs)]
+            del self[self._get_key(*keys)]
         except KeyError:
             pass
 

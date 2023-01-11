@@ -4,5 +4,59 @@
     "email": "john@doe.com",
     "password": "e649b8d4d47f7b5e9bbcb171c77010f17d4f85e26cbd2f2b3d109b931d1c69ec",
     "salt": "45c784"
+  },
+  "test@user.com": {
+    "user_id": "8e385dc900b84a2bbeaf1781ea5d75c6",
+    "email": "test@user.com",
+    "password": "97cd631edaf6a5756ec8fd128d39e8d7e7a3abefcec05016c873b60b6a150974",
+    "salt": "682795"
+  },
+  "u1@user.com": {
+    "user_id": "u1",
+    "email": "u1@user.com",
+    "password": "97cd631edaf6a5756ec8fd128d39e8d7e7a3abefcec05016c873b60b6a150974",
+    "salt": "682795"
+  },
+  "u2@user.com": {
+    "user_id": "u2",
+    "email": "u2@user.com",
+    "password": "97cd631edaf6a5756ec8fd128d39e8d7e7a3abefcec05016c873b60b6a150974",
+    "salt": "682795"
+  },
+  "u3@user.com": {
+    "user_id": "u3",
+    "email": "u3@user.com",
+    "password": "97cd631edaf6a5756ec8fd128d39e8d7e7a3abefcec05016c873b60b6a150974",
+    "salt": "682795"
+  },
+  "u4@user.com": {
+    "user_id": "u4",
+    "email": "u4@user.com",
+    "password": "97cd631edaf6a5756ec8fd128d39e8d7e7a3abefcec05016c873b60b6a150974",
+    "salt": "682795"
+  },
+  "u5@user.com": {
+    "user_id": "u5",
+    "email": "u5@user.com",
+    "password": "97cd631edaf6a5756ec8fd128d39e8d7e7a3abefcec05016c873b60b6a150974",
+    "salt": "682795"
+  },
+  "u6@user.com": {
+    "user_id": "u6",
+    "email": "u6@user.com",
+    "password": "97cd631edaf6a5756ec8fd128d39e8d7e7a3abefcec05016c873b60b6a150974",
+    "salt": "682795"
+  },
+  "u7@user.com": {
+    "user_id": "u7",
+    "email": "u7@user.com",
+    "password": "97cd631edaf6a5756ec8fd128d39e8d7e7a3abefcec05016c873b60b6a150974",
+    "salt": "682795"
+  },
+  "ola@krasno.com": {
+    "user_id": "02bc1f0eb5bd4dd18ff4fca045e2ca36",
+    "email": "ola@krasno.com",
+    "password": "fac452411c5d06c3a0c36302c45169cf3bb68f528b1e7525973828b539d876b5",
+    "salt": "f7e05d"
   }
 }

@@ -1,5 +1,4 @@
-from typing import Dict, List
-from uuid import uuid4
+from typing import List, Optional
 
 from commons.dao import BaseDao
 from fastapi import Depends
@@ -30,12 +29,9 @@ class UserDao(BaseDao):
         password: str,
         avatar_source: str = "",
     ) -> User:
-        user_id = uuid4().hex
-        user = User.create_item(
-            _id=user_id, name=name, surname=surname, avatar_source=avatar_source
-        )
+        user = User.create_item(name=name, surname=surname, avatar_source=avatar_source)
         user_creds = UserCreds.create_item(
-            user_id=user_id, email=email, password=password
+            user_id=user.id, email=email, password=password
         )
         self._users.put_item(user)
         self._user_creds.put_item(user_creds)
@@ -43,11 +39,16 @@ class UserDao(BaseDao):
         self._dump_data("user_creds")
         return user
 
-    def get_users_by_ids(self, user_ids: List[str]) -> List[Dict]:
-        return [self._users.get_item(_id).dict() for _id in user_ids]
+    def get_users_by_ids(self, user_ids: List[str]) -> List[User]:
+        return [self._users.get_item(_id) for _id in user_ids]
 
-    def get_user_creds(self, email: str) -> Dict:
-        return self._user_creds.get_item(email).dict()
+    def get_user_creds(self, email: str) -> UserCreds:
+        return self._user_creds.get_item(email)
+
+    def search(self, email: str = None) -> Optional[User]:
+        if email:
+            user_creds = self._user_creds.get_item(email)
+            return self._users.get_item(user_creds.user_id)
 
 
 def get_user_dao(settings: ApiSettings = Depends(get_api_settings)) -> UserDao:

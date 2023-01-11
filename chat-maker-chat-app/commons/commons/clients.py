@@ -22,7 +22,7 @@ class AuthServiceClient(BaseClient):
 
     def authenticate(self) -> bool:
         response = requests.post(
-            self._get_url(f"/auth/authenticate"), headers=self._headers
+            self._get_url("/auth/authenticate"), headers=self._headers
         )
         if response.status_code == 200:
             return True
@@ -35,12 +35,12 @@ class UserServiceClient(BaseClient):
 
     async def get_users_by_ids(self, query_ids: List[str]) -> List[Dict]:
         response = requests.post(
-            self._get_url(f"/user/query"),
+            self._get_url("/user/query"),
             headers=self._headers,
             json={"user_ids": query_ids},
         )
         if response.status_code == 200:
-            return response.json()
+            return response.json()["users"]
         raise HTTPException(status_code=response.status_code, detail=response.text)
 
     async def get_user_by_id(self, user_id: str) -> Dict:
@@ -49,16 +49,16 @@ class UserServiceClient(BaseClient):
             headers=self._headers,
         )
         if response.status_code == 200:
-            return response.json()
+            return response.json()["user"]
         raise HTTPException(status_code=response.status_code, detail=response.text)
 
     async def sign_in(self, request_body: Dict) -> None:
         pass
 
     async def get_user_creds(self, email: str) -> Dict:
-        response = requests.post(self._get_url(f"/user/creds"), json={"email": email})
+        response = requests.post(self._get_url("/user/creds"), json={"email": email})
         if response.status_code == 200:
-            return response.json()
+            return response.json()["user_creds"]
         raise HTTPException(status_code=response.status_code, detail=response.text)
 
 

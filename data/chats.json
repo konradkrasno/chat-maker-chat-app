@@ -1,73 +1,58 @@
 {
-  "chat1": {
-    "id": "chat1",
-    "members": ["u1"],
+  "3c391b1f58bb46b788d030c34c50a0e6": {
+    "id": "3c391b1f58bb46b788d030c34c50a0e6",
+    "members": ["u1", "7d27972e74ef453aadf07fb441c7e619"],
     "messages": [
       {
         "id": "1658074684502",
         "sendDate": "Sun, 17 Jul 2022 16:18:04 GMT",
         "content": "Hi Vincent",
-        "sender": {
-          "id": "u7",
-          "avatarSource": "https://bootdey.com/img/Content/avatar/avatar4.png",
-          "name": "Vincent",
-          "surname": "Vega"
-        }
+        "sender_id": "7d27972e74ef453aadf07fb441c7e619"
       },
       {
         "id": "1658074689683",
         "sendDate": "Sun, 17 Jul 2022 16:18:09 GMT",
         "content": "What's up?",
-        "sender": {
-          "id": "u7",
-          "avatarSource": "https://bootdey.com/img/Content/avatar/avatar4.png",
-          "name": "Vincent",
-          "surname": "Vega"
-        }
+        "sender_id": "7d27972e74ef453aadf07fb441c7e619"
       }
     ]
   },
-  "chat2": {
-    "id": "chat2",
-    "members": ["u2"],
+  "36ba15bd1742473a844d24b616570c39": {
+    "id": "36ba15bd1742473a844d24b616570c39",
+    "members": ["u2", "7d27972e74ef453aadf07fb441c7e619"],
     "messages": [
       {
         "id": "22112663874C4D1",
         "sendDate": "10:10 AM, Today",
         "content": "Hi Aiden, how are you? How is the project coming along?",
-        "sender": {
-          "id": "u2",
-          "avatarSource": "https://bootdey.com/img/Content/avatar/avatar2.png",
-          "name": "Vincent",
-          "surname": "Vega"
-        }
+        "sender_id": "7d27972e74ef453aadf07fb441c7e619"
       },
       {
         "id": "ECE2E4A0EF9D481",
         "sendDate": "10:12 AM, Today",
         "content": "Are we meeting today?",
-        "sender": {
-          "id": "u7",
-          "avatarSource": "https://bootdey.com/img/Content/avatar/avatar4.png",
-          "name": "Vincent",
-          "surname": "Vega"
-        }
+        "sender_id": "7d27972e74ef453aadf07fb441c7e619"
       },
       {
         "id": "F556EEA83B634AB",
         "sendDate": "10:15 AM, Today",
         "content": "Project has been already finished and I have results to show you.",
-        "sender": {
-          "id": "u7",
-          "avatarSource": "https://bootdey.com/img/Content/avatar/avatar4.png",
-          "name": "Vincent",
-          "surname": "Vega"
-        }
+        "sender_id": "7d27972e74ef453aadf07fb441c7e619"
       }
     ]
   },
-  "chat3": { "id": "chat3", "members": ["u3"], "messages": [] },
-  "chat4": { "id": "chat4", "members": ["u4"], "messages": [] },
-  "chat5": { "id": "chat5", "members": ["u5"], "messages": [] },
-  "chat6": { "id": "chat6", "members": ["u6"], "messages": [] }
+  "4b1bad2c40204a3fb2c49c762aa652d0": {
+    "id": "4b1bad2c40204a3fb2c49c762aa652d0",
+    "members": ["u3", "7d27972e74ef453aadf07fb441c7e619"],
+    "messages": []
+  },
+  "d46288881ed04194b6adeccd7a3a6d3b": {
+    "id": "d46288881ed04194b6adeccd7a3a6d3b",
+    "members": [
+      "8e385dc900b84a2bbeaf1781ea5d75c6",
+      "02bc1f0eb5bd4dd18ff4fca045e2ca36",
+      "7d27972e74ef453aadf07fb441c7e619"
+    ],
+    "messages": []
+  }
 }
