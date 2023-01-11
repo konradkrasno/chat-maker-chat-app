@@ -1,23 +1,43 @@
 {
-  "u1": { "user_id": "u1", "chat_ids": ["3c391b1f58bb46b788d030c34c50a0e6"] },
+  "u1": { "user_id": "u1", "chat_ids": ["a37259242eeb40bda35c41be4172a32f"] },
   "7d27972e74ef453aadf07fb441c7e619": {
     "user_id": "7d27972e74ef453aadf07fb441c7e619",
     "chat_ids": [
-      "3c391b1f58bb46b788d030c34c50a0e6",
-      "36ba15bd1742473a844d24b616570c39",
-      "4b1bad2c40204a3fb2c49c762aa652d0",
-      "d46288881ed04194b6adeccd7a3a6d3b",
-      "0e54695004ae402186b0aa799f331f85"
+      "a37259242eeb40bda35c41be4172a32f",
+      "405f6f0758b34e44b6a7bbf424cc4bd4",
+      "8291c9486da94ba29903137fc79fa157",
+      "0c2b9f5d3a2640d38e1a8a2ae911382f",
+      "4fb5665edb3e4ee4b2fe4f01ce13d4cb",
+      "09969f0e50ed470db73162c433ece8f2",
+      "3608aec0f16d4ae794367dc7cc599c26"
     ]
   },
-  "u2": { "user_id": "u2", "chat_ids": ["36ba15bd1742473a844d24b616570c39"] },
-  "u3": { "user_id": "u3", "chat_ids": ["4b1bad2c40204a3fb2c49c762aa652d0"] },
+  "u2": {
+    "user_id": "u2",
+    "chat_ids": [
+      "405f6f0758b34e44b6a7bbf424cc4bd4",
+      "4fb5665edb3e4ee4b2fe4f01ce13d4cb"
+    ]
+  },
+  "u3": {
+    "user_id": "u3",
+    "chat_ids": [
+      "8291c9486da94ba29903137fc79fa157",
+      "4fb5665edb3e4ee4b2fe4f01ce13d4cb"
+    ]
+  },
   "8e385dc900b84a2bbeaf1781ea5d75c6": {
     "user_id": "8e385dc900b84a2bbeaf1781ea5d75c6",
-    "chat_ids": ["d46288881ed04194b6adeccd7a3a6d3b"]
+    "chat_ids": [
+      "09969f0e50ed470db73162c433ece8f2",
+      "3608aec0f16d4ae794367dc7cc599c26"
+    ]
   },
   "02bc1f0eb5bd4dd18ff4fca045e2ca36": {
     "user_id": "02bc1f0eb5bd4dd18ff4fca045e2ca36",
-    "chat_ids": ["d46288881ed04194b6adeccd7a3a6d3b"]
+    "chat_ids": [
+      "0c2b9f5d3a2640d38e1a8a2ae911382f",
+      "3608aec0f16d4ae794367dc7cc599c26"
+    ]
   }
 }

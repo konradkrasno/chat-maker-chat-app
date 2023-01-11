@@ -46,4 +46,4 @@ def chat_service_client(
 
 @pytest.fixture(scope="session")
 def chat_id() -> str:
-    return "3c391b1f58bb46b788d030c34c50a0e6"
+    return "a37259242eeb40bda35c41be4172a32f"
