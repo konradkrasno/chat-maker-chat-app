@@ -7,7 +7,7 @@ from commons.clients import UserServiceClient, get_user_service_client
 from commons.dao import BaseDao
 from commons.exceptions import ItemDoesNotExistsError
 from commons.utils import hash_list
-from fastapi import Depends
+from fastapi import Cookie, Depends
 from user_service.models import User
 
 
@@ -54,7 +54,7 @@ class ChatDao(BaseDao):
 
     def _prepare_member_ids(self, member_ids: List[str]) -> List[str]:
         member_ids.append(self.user_id)
-        return list(set(member_ids))
+        return list(sorted(set(member_ids)))
 
     def get_chat_by_user(self, member_ids: List[str]) -> Chat:
         member_ids = self._prepare_member_ids(member_ids=member_ids)
@@ -93,15 +93,14 @@ class ChatDao(BaseDao):
         self._dump_data("users_chats")
         return chat
 
-    def put_message(self, chat_id: str, message_data: Dict) -> None:
+    def put_message(self, chat_id: str, message: Message) -> None:
         chat = self.get_user_chat(chat_id)
-        message = Message.load_from_dict(**message_data)
         chat.add_message(message)
         self._dump_data("chats")
 
 
 def get_chat_dao(
-    user_id: str,
+    user_id: str = Cookie(),
     settings: ApiSettings = Depends(get_api_settings),
     user_service_client: UserServiceClient = Depends(get_user_service_client),
 ) -> ChatDao:

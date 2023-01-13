@@ -47,3 +47,7 @@ async def get_chats_members_info(
     except ItemDoesNotExistsError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
     return GetChatsMembersInfoResponseModel(chats_members_info=members_info)
+
+
+async def put_message(data, dao: ChatDao = Depends(get_chat_dao)):
+    pass

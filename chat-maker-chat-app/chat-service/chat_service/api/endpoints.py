@@ -17,7 +17,7 @@ def endpoints(app: FastAPI):
     )
 
     app.add_api_route(
-        "/chats/{user_id}",
+        "/chats",
         logic.get_user_chats,
         methods=["GET"],
         dependencies=[Depends(verify_token)],
@@ -25,7 +25,7 @@ def endpoints(app: FastAPI):
     )
 
     app.add_api_route(
-        "/chats/{user_id}/{chat_id}",
+        "/chats/{chat_id}",
         logic.get_user_chat,
         methods=["GET"],
         dependencies=[Depends(verify_token)],
@@ -33,7 +33,7 @@ def endpoints(app: FastAPI):
     )
 
     app.add_api_route(
-        "/chats/{user_id}",
+        "/chats",
         logic.get_chat_by_users,
         methods=["POST"],
         dependencies=[Depends(verify_token)],
@@ -41,9 +41,16 @@ def endpoints(app: FastAPI):
     )
 
     app.add_api_route(
-        "/members/{user_id}",
+        "/members",
         logic.get_chats_members_info,
         methods=["GET"],
         dependencies=[Depends(verify_token)],
         response_model=GetChatsMembersInfoResponseModel,
+    )
+
+    app.add_api_route(
+        "/put-message",
+        logic.put_message,
+        methods=["POST"],
+        dependencies=[Depends(verify_token)],
     )

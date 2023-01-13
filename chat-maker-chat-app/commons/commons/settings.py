@@ -18,6 +18,9 @@ class CommonSettings(BaseSettings):
     chat_service_url: str
     chat_service_port: int
 
+    ws_service_url: str
+    ws_service_port: int
+
     data_dir: Path = BASE_DIR.parent.parent / "data"
     allow_origins: List[str] = [
         "http://localhost:3000",

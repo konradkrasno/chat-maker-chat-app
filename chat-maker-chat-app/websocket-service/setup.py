@@ -7,5 +7,6 @@ setup(
     install_requires=[
         "fastapi==0.78.0",
         "uvicorn[standard]",
+        "websockets==10.3",
     ],
 )
