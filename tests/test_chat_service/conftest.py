@@ -16,6 +16,8 @@ def chat_svc_settings(test_data_dir) -> ApiSettings:
         user_service_port=8080,
         chat_service_url="dummy",
         chat_service_port=8000,
+        ws_service_url="dummy",
+        ws_service_port=5050,
         data_dir=test_data_dir,
         allow_origins=["*"],
     )
