@@ -44,10 +44,16 @@ class ChatDao(BaseDao):
         chat_ids = self._users_chats.get_or_create_user_chats(self.user_id)
         return [self._chats[chat_id] for chat_id in chat_ids]
 
-    def get_user_chat(self, chat_id: str) -> Chat:
+    async def get_user_chat(self, chat_id: str) -> Dict:
         chat_ids = self._users_chats.get_or_create_user_chats(self.user_id)
         if chat_id in chat_ids:
-            return self._chats.get_item(chat_id)
+            chat = self._chats.get_item(chat_id).dict()
+            for message in chat["messages"]:
+                sender = await self._user_service_client.get_user_by_id(
+                    message["sender_id"]
+                )
+                message["sender"] = sender
+            return chat
         raise ItemDoesNotExistsError(
             f"Provided chat: '{chat_id}' does not exist or you have no access."
         )

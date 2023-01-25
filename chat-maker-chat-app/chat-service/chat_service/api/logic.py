@@ -4,10 +4,12 @@ from chat_service.api.models import (
     GetChatsMembersInfoResponseModel,
     GetUserChatResponseModel,
     GetUserChatsResponseModel,
+    PutMessageRequestModel,
 )
 from chat_service.dao import ChatDao, get_chat_dao
 from commons.exceptions import ItemDoesNotExistsError
 from fastapi import Depends, HTTPException, status
+from fastapi.responses import JSONResponse
 
 
 async def ping():
@@ -25,7 +27,7 @@ async def get_user_chat(
     chat_id: str, dao: ChatDao = Depends(get_chat_dao)
 ) -> GetUserChatResponseModel:
     try:
-        chat = dao.get_user_chat(chat_id)
+        chat = await dao.get_user_chat(chat_id)
     except ItemDoesNotExistsError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
     return GetUserChatResponseModel(chat=chat)
@@ -49,5 +51,11 @@ async def get_chats_members_info(
     return GetChatsMembersInfoResponseModel(chats_members_info=members_info)
 
 
-async def put_message(data, dao: ChatDao = Depends(get_chat_dao)):
-    pass
+async def put_message(
+    data: PutMessageRequestModel, dao: ChatDao = Depends(get_chat_dao)
+):
+    try:
+        dao.put_message(data.chat_id, message=data.message)
+    except ItemDoesNotExistsError as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+    return JSONResponse({"status": "ok"})

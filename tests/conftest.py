@@ -60,6 +60,19 @@ def mock_auth_service_client() -> AuthServiceClient:
 
 
 @pytest.fixture(scope="session")
+def user_data(user_id) -> Dict:
+    return {
+        "id": user_id,
+        "avatarSource": "test",
+        "name": "John",
+        "surname": "Doe",
+        "active": True,
+        "status": " ",
+        "lastSeen": "online",
+    }
+
+
+@pytest.fixture(scope="session")
 def user_creds() -> Dict:
     return {
         "user_id": "7d27972e74ef453aadf07fb441c7e619",
@@ -70,12 +83,15 @@ def user_creds() -> Dict:
 
 
 @pytest.fixture(scope="session")
-def mock_user_service_client(user_creds) -> UserServiceClient:
-    future = asyncio.Future()
-    future.set_result(user_creds)
+def mock_user_service_client(user_creds, user_data) -> UserServiceClient:
+    user_creds_future = asyncio.Future()
+    user_creds_future.set_result(user_creds)
+    user_future = asyncio.Future()
+    user_future.set_result(user_data)
 
     client = MagicMock()
-    client.get_user_creds = MagicMock(return_value=future)
+    client.get_user_creds = MagicMock(return_value=user_creds_future)
+    client.get_user_by_id = MagicMock(return_value=user_future)
     return client
 
 

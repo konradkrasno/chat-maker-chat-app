@@ -1,10 +1,12 @@
 from typing import Dict, List
 
 import requests
+from chat_service.api.models import PutMessageRequestModel
 from chat_service.models import Message
 from commons.models import AuthCookies, get_auth_cookies
 from commons.settings import CommonSettings, get_common_settings
 from fastapi import Depends, HTTPException
+from user_service.api.models import GetUserCredsRequestModel
 
 
 class BaseClient:
@@ -61,7 +63,8 @@ class UserServiceClient(BaseClient):
         pass
 
     async def get_user_creds(self, email: str) -> Dict:
-        response = requests.post(self._get_url("/user/creds"), json={"email": email})
+        request_body = GetUserCredsRequestModel(email=email).json()
+        response = requests.post(self._get_url("/user/creds"), json=request_body)
         if response.status_code == 200:
             return response.json()["user_creds"]
         raise HTTPException(status_code=response.status_code, detail=response.text)
@@ -72,7 +75,11 @@ class ChatServiceClient(BaseClient):
         super().__init__(service_url, service_port, auth_cookies)
 
     async def put_message(self, chat_id: str, message: Message) -> None:
-        pass
+        request_body = PutMessageRequestModel(chat_id=chat_id, message=message).json()
+        response = requests.post(self._get_url("put-message"), json=request_body)
+        if response.status_code == 200:
+            return
+        raise HTTPException(status_code=response.status_code, detail=response.text)
 
 
 def get_auth_service_client(

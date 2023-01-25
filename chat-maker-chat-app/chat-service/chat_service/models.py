@@ -43,10 +43,7 @@ class UserChats(AbstractModel):
 
     @classmethod
     def load_from_dict(cls, **kwargs):
-        return cls(
-            user_id=kwargs["user_id"],
-            chat_ids=[chat_id for chat_id in kwargs["chat_ids"]],
-        )
+        return cls(**kwargs)
 
     @classmethod
     def create_item(cls, user_id: str) -> "UserChats":

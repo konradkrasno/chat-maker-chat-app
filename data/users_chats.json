@@ -7,7 +7,8 @@
       "405f6f0758b34e44b6a7bbf424cc4bd4",
       "c5d50e47fcb14661aa4904acf24742b2",
       "ec3ecbeba51846468f94ce2092d38294",
-      "8c8454560e05456aa81733a65f307cf2"
+      "8c8454560e05456aa81733a65f307cf2",
+      "2d11af3070424106a446f8da2f5b93be"
     ]
   },
   "u2": { "user_id": "u2", "chat_ids": ["405f6f0758b34e44b6a7bbf424cc4bd4"] },
@@ -24,5 +25,6 @@
       "c5d50e47fcb14661aa4904acf24742b2",
       "8c8454560e05456aa81733a65f307cf2"
     ]
-  }
+  },
+  "u3": { "user_id": "u3", "chat_ids": ["2d11af3070424106a446f8da2f5b93be"] }
 }

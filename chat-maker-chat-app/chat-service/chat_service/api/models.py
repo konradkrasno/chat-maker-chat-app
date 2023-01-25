@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from chat_service.models import Chat
+from chat_service.models import Chat, Message
 from pydantic import BaseModel
 from user_service.models import User
 
@@ -10,7 +10,7 @@ class GetUserChatsResponseModel(BaseModel):
 
 
 class GetUserChatResponseModel(BaseModel):
-    chat: Chat
+    chat: Dict
 
 
 class GetChatByUsersRequestModel(BaseModel):
@@ -23,3 +23,8 @@ class GetChatByUsersResponseModel(BaseModel):
 
 class GetChatsMembersInfoResponseModel(BaseModel):
     chats_members_info: Dict[str, List[User]]
+
+
+class PutMessageRequestModel(BaseModel):
+    chat_id: str
+    message: Message
