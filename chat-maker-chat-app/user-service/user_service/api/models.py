@@ -29,16 +29,20 @@ class SignInResponseModel(BaseModel):
     user_id: str
 
 
+class GetUserByIdRequestModel(BaseModel):
+    user_id: str
+
+
+class GetUserByIdResponseModel(BaseModel):
+    user: Optional[User] = None
+
+
 class GetUsersByIdsRequestModel(BaseModel):
     user_ids: List[str]
 
 
 class GetUsersByIdsResponseModel(BaseModel):
     users: List[User]
-
-
-class GetUsersByIdResponseModel(BaseModel):
-    user: Optional[User] = None
 
 
 class GetUserCredsRequestModel(BaseModel):

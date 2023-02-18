@@ -24,20 +24,16 @@ async def websocket_endpoint(
             code=status.WS_1008_POLICY_VIOLATION, reason="Unauthorized token."
         )
 
-    await manager.connect(websocket)
+    await manager.connect(user_id, websocket)
     await manager.broadcast(f"Client #{user_id} joined the chat")
     try:
         while True:
             data = await websocket.receive_json()
-            print("data:", data)
-            chat_id = data["chat_id"]
+            chat_id = data["chatId"]
             message_data = data["message"]
             message = Message.load_from_dict(**message_data)
-            # await manager.send_personal_message(f"You wrote: {data.get('content')}", websocket)
-            await manager.broadcast(
-                f"Client #{user_id} says: {message.content}", websocket
-            )
+            await manager.send_message_to_chat(message=message, chat_id=chat_id)
             await chat_service_client.put_message(chat_id, message)
     except WebSocketDisconnect:
-        manager.disconnect(websocket)
+        manager.disconnect(user_id)
         await manager.broadcast(f"Client #{user_id} left the chat")

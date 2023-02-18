@@ -4,8 +4,8 @@ from commons.dependencies import constrain_access, verify_token
 from fastapi import Depends, FastAPI
 from user_service.api import logic
 from user_service.api.models import (
+    GetUserByIdResponseModel,
     GetUserCredsResponseModel,
-    GetUsersByIdResponseModel,
     GetUsersByIdsResponseModel,
     SearchUsersResponseModel,
     SignInResponseModel,
@@ -30,11 +30,11 @@ def endpoints(app: FastAPI, settings: ApiSettings):
     )
 
     app.add_api_route(
-        "/user/id/{user_id}",
+        "/user/id",
         logic.get_user_by_id,
         methods=["POST"],
         dependencies=[Depends(verify_token)],
-        response_model=GetUsersByIdResponseModel,
+        response_model=GetUserByIdResponseModel,
     )
 
     app.add_api_route(

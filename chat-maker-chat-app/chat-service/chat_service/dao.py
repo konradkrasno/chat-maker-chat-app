@@ -44,25 +44,28 @@ class ChatDao(BaseDao):
         chat_ids = self._users_chats.get_or_create_user_chats(self.user_id)
         return [self._chats[chat_id] for chat_id in chat_ids]
 
-    async def get_user_chat(self, chat_id: str) -> Dict:
+    def get_user_chat(self, chat_id: str) -> Chat:
         chat_ids = self._users_chats.get_or_create_user_chats(self.user_id)
         if chat_id in chat_ids:
-            chat = self._chats.get_item(chat_id).dict()
-            for message in chat["messages"]:
-                sender = await self._user_service_client.get_user_by_id(
-                    message["sender_id"]
-                )
-                message["sender"] = sender
-            return chat
+            return self._chats.get_item(chat_id)
         raise ItemDoesNotExistsError(
             f"Provided chat: '{chat_id}' does not exist or you have no access."
         )
+
+    async def get_user_chat_with_sender_data(self, chat_id: str) -> Dict:
+        chat = self.get_user_chat(chat_id=chat_id).dict()
+        for message in chat["messages"]:
+            sender = await self._user_service_client.get_user_by_id(
+                message["sender_id"]
+            )
+            message["sender"] = sender
+        return chat
 
     def _prepare_member_ids(self, member_ids: List[str]) -> List[str]:
         member_ids.append(self.user_id)
         return list(sorted(set(member_ids)))
 
-    def get_chat_by_user(self, member_ids: List[str]) -> Chat:
+    def get_chat_by_users(self, member_ids: List[str]) -> Chat:
         member_ids = self._prepare_member_ids(member_ids=member_ids)
         members_hash = hash_list(member_ids)
         try:
@@ -70,6 +73,9 @@ class ChatDao(BaseDao):
         except ItemDoesNotExistsError:
             return self.create_chat(member_ids=member_ids)
         return self._chats.get_item(chat_members.chat_id)
+
+    def get_chat_members(self, chat_id: str) -> List[str]:
+        return self._chats.get_item(id=chat_id).members
 
     async def get_chats_members_info(self) -> Dict[str, List[User]]:
         chats = self.get_user_chats()

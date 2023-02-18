@@ -16,7 +16,7 @@ def test_load_users_chats(chat_dao):
 
 @pytest.mark.asyncio
 async def test_get_user_chat(chat_dao, chat_id):
-    chat = await chat_dao.get_user_chat(chat_id)
+    chat = await chat_dao.get_user_chat_with_sender_data(chat_id)
     expected_chat = chat_dao._chats[chat_id]
     assert chat["id"] == expected_chat.id
     assert chat["members"] == expected_chat.members

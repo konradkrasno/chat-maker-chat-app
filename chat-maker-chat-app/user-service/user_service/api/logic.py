@@ -2,9 +2,10 @@ from commons.exceptions import ItemDoesNotExistsError
 from fastapi import Depends, status
 from fastapi.exceptions import HTTPException
 from user_service.api.models import (
+    GetUserByIdRequestModel,
+    GetUserByIdResponseModel,
     GetUserCredsRequestModel,
     GetUserCredsResponseModel,
-    GetUsersByIdResponseModel,
     GetUsersByIdsRequestModel,
     GetUsersByIdsResponseModel,
     SearchUsersResponseModel,
@@ -44,13 +45,15 @@ async def get_users_by_ids(
 
 
 async def get_user_by_id(
-    user_id: str,
+    data: GetUserByIdRequestModel,
     user_dao: UserDao = Depends(get_user_dao),
-) -> GetUsersByIdResponseModel:
+) -> GetUserByIdResponseModel:
     try:
-        return GetUsersByIdResponseModel(user=user_dao.get_users_by_ids([user_id])[0])
+        return GetUserByIdResponseModel(
+            user=user_dao.get_users_by_ids([data.user_id])[0]
+        )
     except ItemDoesNotExistsError:
-        return GetUsersByIdResponseModel()
+        return GetUserByIdResponseModel()
 
 
 async def get_user_creds(

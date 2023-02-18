@@ -1,12 +1,12 @@
 from typing import Dict, List
 
 import requests
-from chat_service.api.models import PutMessageRequestModel
+from chat_service.api.models import GetChatMembersRequestModel, PutMessageRequestModel
 from chat_service.models import Message
 from commons.models import AuthCookies, get_auth_cookies
 from commons.settings import CommonSettings, get_common_settings
 from fastapi import Depends, HTTPException
-from user_service.api.models import GetUserCredsRequestModel
+from user_service.api.models import GetUserByIdRequestModel, GetUserCredsRequestModel
 
 
 class BaseClient:
@@ -51,8 +51,10 @@ class UserServiceClient(BaseClient):
         raise HTTPException(status_code=response.status_code, detail=response.text)
 
     async def get_user_by_id(self, user_id: str) -> Dict:
+        request_body = GetUserByIdRequestModel(user_id=user_id).dict()
         response = requests.post(
-            self._get_url(f"/user/id/{user_id}"),
+            self._get_url("/user/id"),
+            json=request_body,
             cookies=self.auth_cookies,
         )
         if response.status_code == 200:
@@ -63,7 +65,7 @@ class UserServiceClient(BaseClient):
         pass
 
     async def get_user_creds(self, email: str) -> Dict:
-        request_body = GetUserCredsRequestModel(email=email).json()
+        request_body = GetUserCredsRequestModel(email=email).dict()
         response = requests.post(self._get_url("/user/creds"), json=request_body)
         if response.status_code == 200:
             return response.json()["user_creds"]
@@ -74,9 +76,20 @@ class ChatServiceClient(BaseClient):
     def __init__(self, service_url: str, service_port: int, auth_cookies: AuthCookies):
         super().__init__(service_url, service_port, auth_cookies)
 
+    async def get_chat_members(self, chat_id: str) -> List[str]:
+        request_body = GetChatMembersRequestModel(chat_id=chat_id).dict()
+        response = requests.post(
+            self._get_url("/members"), json=request_body, cookies=self.auth_cookies
+        )
+        if response.status_code == 200:
+            return response.json()["members"]
+        raise HTTPException(status_code=response.status_code, detail=response.text)
+
     async def put_message(self, chat_id: str, message: Message) -> None:
-        request_body = PutMessageRequestModel(chat_id=chat_id, message=message).json()
-        response = requests.post(self._get_url("put-message"), json=request_body)
+        request_body = PutMessageRequestModel(chat_id=chat_id, message=message).dict()
+        response = requests.post(
+            self._get_url("/put-message"), json=request_body, cookies=self.auth_cookies
+        )
         if response.status_code == 200:
             return
         raise HTTPException(status_code=response.status_code, detail=response.text)

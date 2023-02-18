@@ -1,6 +1,7 @@
 from chat_service.api import logic
 from chat_service.api.models import (
     GetChatByUsersResponseModel,
+    GetChatMembersResponseModel,
     GetChatsMembersInfoResponseModel,
     GetUserChatResponseModel,
     GetUserChatsResponseModel,
@@ -38,6 +39,14 @@ def endpoints(app: FastAPI):
         methods=["POST"],
         dependencies=[Depends(verify_token)],
         response_model=GetChatByUsersResponseModel,
+    )
+
+    app.add_api_route(
+        "/members",
+        logic.get_chat_members,
+        methods=["POST"],
+        dependencies=[Depends(verify_token)],
+        response_model=GetChatMembersResponseModel,
     )
 
     app.add_api_route(

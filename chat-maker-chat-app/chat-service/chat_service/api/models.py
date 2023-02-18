@@ -21,6 +21,14 @@ class GetChatByUsersResponseModel(BaseModel):
     chat: Chat
 
 
+class GetChatMembersRequestModel(BaseModel):
+    chat_id: str
+
+
+class GetChatMembersResponseModel(BaseModel):
+    members: List[str]
+
+
 class GetChatsMembersInfoResponseModel(BaseModel):
     chats_members_info: Dict[str, List[User]]
 

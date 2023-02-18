@@ -1,6 +1,8 @@
 from chat_service.api.models import (
     GetChatByUsersRequestModel,
     GetChatByUsersResponseModel,
+    GetChatMembersRequestModel,
+    GetChatMembersResponseModel,
     GetChatsMembersInfoResponseModel,
     GetUserChatResponseModel,
     GetUserChatsResponseModel,
@@ -24,10 +26,10 @@ async def get_user_chats(
 
 
 async def get_user_chat(
-    chat_id: str, dao: ChatDao = Depends(get_chat_dao)
+    data: GetChatMembersRequestModel, dao: ChatDao = Depends(get_chat_dao)
 ) -> GetUserChatResponseModel:
     try:
-        chat = await dao.get_user_chat(chat_id)
+        chat = await dao.get_user_chat_with_sender_data(data.chat_id)
     except ItemDoesNotExistsError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
     return GetUserChatResponseModel(chat=chat)
@@ -37,8 +39,18 @@ async def get_chat_by_users(
     data: GetChatByUsersRequestModel, dao: ChatDao = Depends(get_chat_dao)
 ) -> GetChatByUsersResponseModel:
     return GetChatByUsersResponseModel(
-        chat=dao.get_chat_by_user(member_ids=data.user_ids)
+        chat=dao.get_chat_by_users(member_ids=data.user_ids)
     )
+
+
+async def get_chat_members(
+    data: GetChatMembersRequestModel, dao: ChatDao = Depends(get_chat_dao)
+) -> GetChatMembersResponseModel:
+    try:
+        members = dao.get_chat_members(data.chat_id)
+    except ItemDoesNotExistsError as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+    return GetChatMembersResponseModel(members=members)
 
 
 async def get_chats_members_info(
