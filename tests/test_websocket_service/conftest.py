@@ -5,10 +5,6 @@ from fastapi.testclient import TestClient
 from fastapi.websockets import WebSocket
 from websocket_service.app import create_app
 from websocket_service.settings import WSSettings, get_ws_settings
-from websocket_service.websocket.connection_manager import (
-    ConnectionManager,
-    get_connection_manager,
-)
 
 
 @pytest.fixture(scope="session")
@@ -29,23 +25,16 @@ def websocket_svc_settings(test_data_dir) -> WSSettings:
 
 
 @pytest.fixture(scope="function")
-def connection_manager(mock_chat_service_client) -> ConnectionManager:
-    return ConnectionManager(chat_service_client=mock_chat_service_client)
-
-
-@pytest.fixture(scope="function")
 def websocket_app(
     websocket_svc_settings,
     mock_auth_service_client,
     mock_chat_service_client,
-    connection_manager,
 ) -> FastAPI:
     app = create_app()
 
     app.dependency_overrides[get_ws_settings] = lambda: websocket_svc_settings
     app.dependency_overrides[get_auth_service_client] = lambda: mock_auth_service_client
     app.dependency_overrides[get_chat_service_client] = lambda: mock_chat_service_client
-    app.dependency_overrides[get_connection_manager] = lambda: connection_manager
 
     return app
 

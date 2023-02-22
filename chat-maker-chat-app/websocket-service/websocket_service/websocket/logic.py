@@ -6,16 +6,14 @@ from commons.clients import (
     get_chat_service_client,
 )
 from fastapi import Cookie, Depends, WebSocket, WebSocketDisconnect, status
-from websocket_service.websocket.connection_manager import (
-    ConnectionManager,
-    get_connection_manager,
-)
+from websocket_service.websocket.connection_manager import ConnectionManager
+
+manager = ConnectionManager()
 
 
 async def websocket_endpoint(
     websocket: WebSocket,
     user_id: str = Cookie(default=None),
-    manager: ConnectionManager = Depends(get_connection_manager),
     auth_service_client: AuthServiceClient = Depends(get_auth_service_client),
     chat_service_client: ChatServiceClient = Depends(get_chat_service_client),
 ):
@@ -32,7 +30,11 @@ async def websocket_endpoint(
             chat_id = data["chatId"]
             message_data = data["message"]
             message = Message.load_from_dict(**message_data)
-            await manager.send_message_to_chat(message=message, chat_id=chat_id)
+            await manager.send_message_to_chat(
+                message=message,
+                chat_id=chat_id,
+                chat_service_client=chat_service_client,
+            )
             await chat_service_client.put_message(chat_id, message)
     except WebSocketDisconnect:
         manager.disconnect(user_id)

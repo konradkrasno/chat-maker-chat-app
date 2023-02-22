@@ -1,4 +1,4 @@
-def test_connect(connection_manager):
+def test_connect():
     pass
 
 

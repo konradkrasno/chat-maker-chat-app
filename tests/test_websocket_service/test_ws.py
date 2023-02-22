@@ -1,15 +1,17 @@
 from unittest.mock import patch
 
+from websocket_service.websocket.logic import manager
+
 
 @patch("builtins.print")
 def test_websocket_endpoint(
-    mocked_print, websocket_1, websocket_2, connection_manager, mock_chat_service_client
+    mocked_print, websocket_1, websocket_2, mock_chat_service_client
 ):
     chat_id = "test-chat-id"
     assert websocket_1.receive_text() == "Client #test_user_1 joined the chat"
     assert websocket_1.receive_text() == "Client #test_user_2 joined the chat"
     assert websocket_2.receive_text() == "Client #test_user_2 joined the chat"
-    assert len(connection_manager.active_connections) == 2
+    assert len(manager.active_connections) == 2
 
     test_message_1 = {
         "message": {
