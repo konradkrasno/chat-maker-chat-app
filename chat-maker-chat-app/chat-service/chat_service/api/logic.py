@@ -26,10 +26,10 @@ async def get_user_chats(
 
 
 async def get_user_chat(
-    data: GetChatMembersRequestModel, dao: ChatDao = Depends(get_chat_dao)
+    chat_id: str, dao: ChatDao = Depends(get_chat_dao)
 ) -> GetUserChatResponseModel:
     try:
-        chat = await dao.get_user_chat_with_sender_data(data.chat_id)
+        chat = await dao.get_user_chat_with_sender_data(chat_id)
     except ItemDoesNotExistsError as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
     return GetUserChatResponseModel(chat=chat)

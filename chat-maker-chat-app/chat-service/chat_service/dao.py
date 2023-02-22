@@ -75,7 +75,7 @@ class ChatDao(BaseDao):
         return self._chats.get_item(chat_members.chat_id)
 
     def get_chat_members(self, chat_id: str) -> List[str]:
-        return self._chats.get_item(id=chat_id).members
+        return self._chats.get_item(chat_id).members
 
     async def get_chats_members_info(self) -> Dict[str, List[User]]:
         chats = self.get_user_chats()
