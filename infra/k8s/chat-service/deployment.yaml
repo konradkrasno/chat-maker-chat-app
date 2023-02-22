@@ -18,7 +18,7 @@ spec:
         app: chat-maker-chat-service
     spec:
       containers:
-        - image: localhost:32000/chat-maker-chat-service
+        - image: chat-service:local
           name: chat-maker-chat-service
           ports:
             - containerPort: 80
@@ -36,10 +36,14 @@ spec:
               value: "0.0.0.0"
             - name: CHAT_SERVICE_PORT
               value: "80"
+            - name: WS_SERVICE_URL
+              value: "0.0.0.0"
+            - name: WS_SERVICE_PORT
+              value: "80"
             - name: STORAGE_TYPE
               value: "files"
             - name: DATA_DIR
-              value: "app/data"
+              value: "/data"
             - name: ALLOW_ORIGINS
               value: '["*"]'
 status: {}
